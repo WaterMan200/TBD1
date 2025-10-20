@@ -11,7 +11,10 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private PlayerMove p1PlayerMove;
     [SerializeField] private PlayerMove p2PlayerMove;
     [SerializeField] private AttackHit attackHit;
-    [SerializeField] private BlockHit blockHit;
+    [SerializeField] public GameObject HblockPlayerTrigger;
+    [SerializeField] public GameObject LblockPlayerTrigger;
+    [SerializeField] private HBlockHit HblockHit;
+    [SerializeField] private LBlockHit LblockHit;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Vector2 mover;
     [SerializeField] private float blockTimer;
@@ -38,10 +41,15 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private bool LattackHitCheck;
     [SerializeField] public Slider p1Slider;
     [SerializeField] public Slider p2Slider;
+    [SerializeField] private float HblockTimerTwo;
+    [SerializeField] private bool HblockTimerCheckTwo;
+    [SerializeField] private float LblockTimerTwo;
+    [SerializeField] private bool LblockTimerCheckTwo; 
     
 
-    void Start()
+    public void Start()
     {
+        gameObject.transform.position = new Vector3(0,0,0);
         cooldown = 0f;
         animCooldown = 0f;
         hp = 5f;
@@ -64,8 +72,18 @@ public class PlayerMove : MonoBehaviour
         ui = main.GetComponent<UI>();
         rb = gameObject.GetComponent<Rigidbody2D>();
         attackHit = gameObject.transform.GetChild(0).GetComponent<AttackHit>();
-        blockHit = gameObject.transform.GetChild(2).GetComponent<BlockHit>();
+        HblockHit = gameObject.transform.GetChild(2).GetComponent<HBlockHit>();
+        LblockHit = gameObject.transform.GetChild(3).GetComponent<LBlockHit>();
         busy = false;
+        animator.Play("Idle");
+        if(playerIndex == 0)
+        {
+            p1Slider.value = hp;
+        }
+        if(playerIndex == 1)
+        {
+            p2Slider.value = hp;
+        }
     }
     public void RoundStart()
     {
@@ -144,20 +162,30 @@ public class PlayerMove : MonoBehaviour
         {
             if(playerIndex == 0)
             {
-                if(blockHit.P1Block() && p2PlayerMove.IsHAttacking())
+                if(HblockHit.P1Block() && p2PlayerMove.IsHAttacking())
                 {
                     p1HBlocked = true;
-                    blockTimer = 1.2f;
+                    blockTimer = 2/3f;
                     blockTimerCheck = true;
+                }
+                else
+                {
+                    HblockTimerTwo = .25f;
+                    HblockTimerCheckTwo  = true;
                 }
             }
             if(playerIndex == 1)
             {
-                if(blockHit.P2Block() && p1PlayerMove.IsHAttacking())
+                if(HblockHit.P2Block() && p1PlayerMove.IsHAttacking())
                 {
                     p2HBlocked = true;
-                    blockTimer = 1.2f;
+                    blockTimer = 2/3f;
                     blockTimerCheck = true;
+                }
+                else
+                {
+                    HblockTimerTwo = .25f;
+                    HblockTimerCheckTwo  = true;
                 }
             }
             animator.SetTrigger("blockhigh");
@@ -176,20 +204,30 @@ public class PlayerMove : MonoBehaviour
         {
             if(playerIndex == 0)
             {
-                if(blockHit.P1Block() && p2PlayerMove.IsLAttacking())
+                if(LblockHit.P1Block() && p2PlayerMove.IsLAttacking())
                 {
                     p1LBlocked = true;
-                    blockTimer = 1.2f;
+                    blockTimer = 2/3f;
                     blockTimerCheck = true;
+                }
+                else
+                {
+                    LblockTimerTwo = .25f;
+                    LblockTimerCheckTwo  = true;
                 }
             }
             if(playerIndex == 1)
             {
-                if(blockHit.P2Block() && p1PlayerMove.IsLAttacking())
+                if(LblockHit.P2Block() && p1PlayerMove.IsLAttacking())
                 {
                     p2LBlocked = true;
-                    blockTimer = 1.2f;
+                    blockTimer = 2/3f;
                     blockTimerCheck = true;
+                } 
+                else
+                {
+                    LblockTimerTwo = .25f;
+                    LblockTimerCheckTwo  = true;
                 }
             }
             animator.SetTrigger("blocklow");
@@ -210,6 +248,7 @@ public class PlayerMove : MonoBehaviour
         }
         if(playerIndex == 1)
         {
+            Debug.Log(p2HBlocked);
             return p2HBlocked;
         }
         return false;
@@ -291,6 +330,54 @@ public class PlayerMove : MonoBehaviour
             if(playerIndex == 1)
             {
                 p2LBlocked = false;
+            }
+        }
+        HblockTimerTwo -= Time.deltaTime;
+        if(HblockTimerTwo <= 0 && HblockTimerCheckTwo)
+        {
+            HblockTimerCheckTwo = false;
+            HblockTimerTwo = 0f;
+            if(playerIndex == 0)
+            {
+                if(HblockHit.P1Block() && p2PlayerMove.IsHAttacking())
+                {
+                    p1HBlocked = true;
+                    blockTimer = .95f;
+                    blockTimerCheck = true;
+                }
+            }
+            if(playerIndex == 1)
+            {
+                if(HblockHit.P2Block() && p1PlayerMove.IsHAttacking())
+                {
+                    p2HBlocked = true;
+                    blockTimer = .95f;
+                    blockTimerCheck = true;
+                }
+            }
+        }
+        LblockTimerTwo -= Time.deltaTime;
+        if(LblockTimerTwo <= 0 && LblockTimerCheckTwo)
+        {
+            LblockTimerCheckTwo = false;
+            LblockTimerTwo = 0f;
+            if(playerIndex == 0)
+            {
+                if(LblockHit.P1Block() && p2PlayerMove.IsLAttacking())
+                {
+                    p1LBlocked = true;
+                    blockTimer = .95f;
+                    blockTimerCheck = true;
+                }
+            }
+            if(playerIndex == 1)
+            {
+                if(LblockHit.P2Block() && p1PlayerMove.IsLAttacking())
+                {
+                    p2LBlocked = true;
+                    blockTimer = .95f;
+                    blockTimerCheck = true;
+                }
             }
         }
         cooldown -= Time.deltaTime;

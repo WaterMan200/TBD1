@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BlockHit : MonoBehaviour
+public class HBlockHit : MonoBehaviour
 {
-    private bool p1Blocking = false;
-    private bool p2Blocking = false;
+    [SerializeField] private bool p1Blocking = false;
+    [SerializeField] private bool p2Blocking = false;
     GameObject parentGameObject; 
     void Start()
     {
@@ -15,14 +15,14 @@ public class BlockHit : MonoBehaviour
     {
         if(parentGameObject.CompareTag("P2"))
         {
-            if (other.CompareTag("AttackTriggerP1"))
+            if (other.CompareTag("AttackTriggerP1H"))
                 {
                     p2Blocking = true;
                 }
         }
         if(parentGameObject.CompareTag("P1"))
         {
-            if (other.CompareTag("AttackTriggerP2"))
+            if (other.CompareTag("AttackTriggerP2H"))
                 {
                     p1Blocking = true;
                 }
@@ -32,14 +32,14 @@ public class BlockHit : MonoBehaviour
     {
         if(parentGameObject.CompareTag("P2"))
         {
-            if (other.CompareTag("AttackTriggerP1"))
+            if (other.CompareTag("AttackTriggerP1H"))
                 {
                     p2Blocking = false;
                 }
         }
         if(parentGameObject.CompareTag("P1"))
         {
-            if (other.CompareTag("AttackTriggerP2"))
+            if (other.CompareTag("AttackTriggerP2H"))
                 {
                     p1Blocking = false;
                 }

@@ -6,10 +6,12 @@ TagManager:
   tags:
   - P1
   - P2
-  - AttackTriggerP1
-  - AttackTriggerP2
   - BlockTriggerP1
   - BlockTriggerP2
+  - AttackTriggerP1H
+  - AttackTriggerP1L
+  - AttackTriggerP2H
+  - AttackTriggerP2L
   layers:
   - Default
   - TransparentFX
