@@ -44,15 +44,21 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float HblockTimerTwo;
     [SerializeField] private bool HblockTimerCheckTwo;
     [SerializeField] private float LblockTimerTwo;
-    [SerializeField] private bool LblockTimerCheckTwo; 
+    [SerializeField] private bool LblockTimerCheckTwo;
+    [SerializeField] private float damageAbility;
+    [SerializeField] private int healthAbility;
     
 
     public void Start()
     {
+        damageAbility = 1f;
+        healthAbility = 0;
+        AbilitiesChooser(0);
+        AbilitiesChooser(1);
         gameObject.transform.position = new Vector3(0,0,0);
         cooldown = 0f;
         animCooldown = 0f;
-        hp = 5f;
+        hp = 5f + healthAbility;
         p1HBlocked = false;
         p2HBlocked = false;
         p1LBlocked = false;
@@ -78,10 +84,12 @@ public class PlayerMove : MonoBehaviour
         animator.Play("Idle");
         if(playerIndex == 0)
         {
+            p1Slider.maxValue = hp;
             p1Slider.value = hp;
         }
-        if(playerIndex == 1)
+        if (playerIndex == 1)
         {
+            p2Slider.maxValue = hp;
             p2Slider.value = hp;
         }
     }
@@ -298,57 +306,57 @@ public class PlayerMove : MonoBehaviour
     }
     void Update()
     {
-        if(hp <= 0)
+        if (hp <= 0)
         {
-            if(playerIndex == 0)
+            if (playerIndex == 0)
             {
                 ui.P2Win();
             }
-            if(playerIndex == 1)
+            if (playerIndex == 1)
             {
                 ui.P1Win();
             }
         }
         blockTimer -= Time.deltaTime;
-        if(blockTimer <= 0 && blockTimerCheck == true)
+        if (blockTimer <= 0 && blockTimerCheck == true)
         {
             Debug.Log(blockTimer);
             blockTimerCheck = false;
             blockTimer = 0;
-            if(playerIndex == 0)
+            if (playerIndex == 0)
             {
                 p1HBlocked = false;
             }
-            if(playerIndex == 1)
+            if (playerIndex == 1)
             {
                 p2HBlocked = false;
             }
-            if(playerIndex == 0)
+            if (playerIndex == 0)
             {
                 p1LBlocked = false;
             }
-            if(playerIndex == 1)
+            if (playerIndex == 1)
             {
                 p2LBlocked = false;
             }
         }
         HblockTimerTwo -= Time.deltaTime;
-        if(HblockTimerTwo <= 0 && HblockTimerCheckTwo)
+        if (HblockTimerTwo <= 0 && HblockTimerCheckTwo)
         {
             HblockTimerCheckTwo = false;
             HblockTimerTwo = 0f;
-            if(playerIndex == 0)
+            if (playerIndex == 0)
             {
-                if(HblockHit.P1Block() && p2PlayerMove.IsHAttacking())
+                if (HblockHit.P1Block() && p2PlayerMove.IsHAttacking())
                 {
                     p1HBlocked = true;
                     blockTimer = .95f;
                     blockTimerCheck = true;
                 }
             }
-            if(playerIndex == 1)
+            if (playerIndex == 1)
             {
-                if(HblockHit.P2Block() && p1PlayerMove.IsHAttacking())
+                if (HblockHit.P2Block() && p1PlayerMove.IsHAttacking())
                 {
                     p2HBlocked = true;
                     blockTimer = .95f;
@@ -357,22 +365,22 @@ public class PlayerMove : MonoBehaviour
             }
         }
         LblockTimerTwo -= Time.deltaTime;
-        if(LblockTimerTwo <= 0 && LblockTimerCheckTwo)
+        if (LblockTimerTwo <= 0 && LblockTimerCheckTwo)
         {
             LblockTimerCheckTwo = false;
             LblockTimerTwo = 0f;
-            if(playerIndex == 0)
+            if (playerIndex == 0)
             {
-                if(LblockHit.P1Block() && p2PlayerMove.IsLAttacking())
+                if (LblockHit.P1Block() && p2PlayerMove.IsLAttacking())
                 {
                     p1LBlocked = true;
                     blockTimer = .95f;
                     blockTimerCheck = true;
                 }
             }
-            if(playerIndex == 1)
+            if (playerIndex == 1)
             {
-                if(LblockHit.P2Block() && p1PlayerMove.IsLAttacking())
+                if (LblockHit.P2Block() && p1PlayerMove.IsLAttacking())
                 {
                     p2LBlocked = true;
                     blockTimer = .95f;
@@ -381,20 +389,20 @@ public class PlayerMove : MonoBehaviour
             }
         }
         cooldown -= Time.deltaTime;
-        if(0f >= cooldown)
+        if (0f >= cooldown)
         {
-            rb.velocity = new Vector2(mover.x*5f, 0f);
-            if(mover.x == 0)
+            rb.velocity = new Vector2(mover.x * 5f, 0f);
+            if (mover.x == 0)
             {
                 animator.SetBool("walking 0", false);
                 animator.SetBool("walk back 0", false);
             }
-            else if(mover.x > 0)
+            else if (mover.x > 0)
             {
                 animator.SetBool("walking 0", true);
                 animator.SetBool("walk back 0", false);
             }
-            else if(mover.x < 0)
+            else if (mover.x < 0)
             {
                 animator.SetBool("walking 0", false);
                 animator.SetBool("walk back 0", true);
@@ -409,22 +417,22 @@ public class PlayerMove : MonoBehaviour
             animator.SetBool("walk back 0", false);
         }
         animCooldown -= Time.deltaTime;
-        if(animCooldown <= 0f)
+        if (animCooldown <= 0f)
         {
             animCooldown = 0f;
             animBusy = false;
             animator.SetBool("busy", animBusy);
         }
         HattackHitStarter -= Time.deltaTime;
-        if(HattackHitStarter <= 0 && HattackHitCheck)
+        if (HattackHitStarter <= 0 && HattackHitCheck)
         {
             HattackHitStarter = 0;
             HattackHitCheck = false;
-            if(playerIndex == 0)
+            if (playerIndex == 0)
             {
-                if(attackHit.P1Hit())
+                if (attackHit.P1Hit())
                 {
-                    if(p2PlayerMove.IsHBlocking())
+                    if (p2PlayerMove.IsHBlocking())
                     {
                         Debug.Log("p2HBlocked");
                         cooldown = 1.2f;
@@ -432,15 +440,15 @@ public class PlayerMove : MonoBehaviour
                     else
                     {
                         Debug.Log("p1Win");
-                        p2PlayerMove.GotHit(1f);
+                        p2PlayerMove.GotHit(damageAbility);
                     }
                 }
             }
-            if(playerIndex == 1)
+            if (playerIndex == 1)
             {
-                if(attackHit.P2Hit())
+                if (attackHit.P2Hit())
                 {
-                    if(p1PlayerMove.IsHBlocking())
+                    if (p1PlayerMove.IsHBlocking())
                     {
                         Debug.Log("p1HBlocked");
                         cooldown = 1.2f;
@@ -448,21 +456,21 @@ public class PlayerMove : MonoBehaviour
                     else
                     {
                         Debug.Log("p2Win");
-                        p1PlayerMove.GotHit(1f);
+                        p1PlayerMove.GotHit(damageAbility);
                     }
                 }
             }
         }
         LattackHitStarter -= Time.deltaTime;
-        if(LattackHitStarter <= 0 && LattackHitCheck)
+        if (LattackHitStarter <= 0 && LattackHitCheck)
         {
             LattackHitStarter = 0;
             LattackHitCheck = false;
-            if(playerIndex == 0)
+            if (playerIndex == 0)
             {
-                if(attackHit.P1Hit())
+                if (attackHit.P1Hit())
                 {
-                    if(p2PlayerMove.IsLBlocking())
+                    if (p2PlayerMove.IsLBlocking())
                     {
                         Debug.Log("p2LBlocked");
                         cooldown = 1.2f;
@@ -470,15 +478,15 @@ public class PlayerMove : MonoBehaviour
                     else
                     {
                         Debug.Log("p1Hit");
-                        p2PlayerMove.GotHit(1f);
+                        p2PlayerMove.GotHit(damageAbility);
                     }
                 }
             }
-            if(playerIndex == 1)
+            if (playerIndex == 1)
             {
-                if(attackHit.P2Hit())
+                if (attackHit.P2Hit())
                 {
-                    if(p1PlayerMove.IsLBlocking())
+                    if (p1PlayerMove.IsLBlocking())
                     {
                         Debug.Log("p1LBlocked");
                         cooldown = 1.2f;
@@ -486,10 +494,17 @@ public class PlayerMove : MonoBehaviour
                     else
                     {
                         Debug.Log("p2Win");
-                        p1PlayerMove.GotHit(1f);
+                        p1PlayerMove.GotHit(damageAbility);
                     }
                 }
             }
         }
+    }
+    void AbilitiesChooser(int ability)
+    {
+        if (ability == 0)
+            damageAbility = 2f;
+        if (ability == 1)
+            healthAbility = 2;
     }
 }
