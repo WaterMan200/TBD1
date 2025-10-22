@@ -47,6 +47,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private bool LblockTimerCheckTwo;
     [SerializeField] private float damageAbility;
     [SerializeField] private int healthAbility;
+    [SerializeField] private float speed;
     
 
     public void Start()
@@ -55,6 +56,7 @@ public class PlayerMove : MonoBehaviour
         healthAbility = 0;
         AbilitiesChooser(0);
         AbilitiesChooser(1);
+        AbilitiesChooser(2);
         gameObject.transform.position = new Vector3(0,0,0);
         cooldown = 0f;
         animCooldown = 0f;
@@ -81,6 +83,8 @@ public class PlayerMove : MonoBehaviour
         HblockHit = gameObject.transform.GetChild(2).GetComponent<HBlockHit>();
         LblockHit = gameObject.transform.GetChild(3).GetComponent<LBlockHit>();
         busy = false;
+        speed = 5f;
+
         animator.Play("Idle");
         if(playerIndex == 0)
         {
@@ -391,8 +395,9 @@ public class PlayerMove : MonoBehaviour
         cooldown -= Time.deltaTime;
         if (0f >= cooldown)
         {
-            rb.velocity = new Vector2(mover.x * 5f, 0f);
-            if (mover.x == 0)
+            rb.velocity = new Vector2(mover.x*speed, 0f);
+
+            if(mover.x == 0)
             {
                 animator.SetBool("walking 0", false);
                 animator.SetBool("walk back 0", false);
@@ -506,5 +511,7 @@ public class PlayerMove : MonoBehaviour
             damageAbility = 2f;
         if (ability == 1)
             healthAbility = 2;
+        if (ability == 2)
+            speed *= 1.5f;
     }
 }
