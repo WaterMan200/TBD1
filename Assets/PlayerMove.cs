@@ -19,6 +19,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private Vector2 mover;
     [SerializeField] private float blockTimer;
     [SerializeField] private float hp;
+    [SerializeField] private float hpMax;
     [SerializeField] private bool blockTimerCheck;
     [SerializeField] private float cooldown;
     [SerializeField] private bool busy;
@@ -45,22 +46,25 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private bool HblockTimerCheckTwo;
     [SerializeField] private float LblockTimerTwo;
     [SerializeField] private bool LblockTimerCheckTwo;
-    [SerializeField] private float damageAbility;
-    [SerializeField] private int healthAbility;
+    [SerializeField] private float damage;
     [SerializeField] private float speed;
+    [SerializeField] private float regen;
+    [SerializeField] private float regenTime;
     
 
     public void Start()
     {
-        damageAbility = 1f;
-        healthAbility = 0;
+        damage = 1f;
+        hpMax = 5f;
+        regen = 0;
         AbilitiesChooser(0);
         AbilitiesChooser(1);
         AbilitiesChooser(2);
         gameObject.transform.position = new Vector3(0,0,0);
         cooldown = 0f;
         animCooldown = 0f;
-        hp = 5f + healthAbility;
+        hp = hpMax;
+        regenTime = 1f;
         p1HBlocked = false;
         p2HBlocked = false;
         p1LBlocked = false;
@@ -445,7 +449,7 @@ public class PlayerMove : MonoBehaviour
                     else
                     {
                         Debug.Log("p1Win");
-                        p2PlayerMove.GotHit(damageAbility);
+                        p2PlayerMove.GotHit(damage);
                     }
                 }
             }
@@ -461,7 +465,7 @@ public class PlayerMove : MonoBehaviour
                     else
                     {
                         Debug.Log("p2Win");
-                        p1PlayerMove.GotHit(damageAbility);
+                        p1PlayerMove.GotHit(damage);
                     }
                 }
             }
@@ -483,7 +487,7 @@ public class PlayerMove : MonoBehaviour
                     else
                     {
                         Debug.Log("p1Hit");
-                        p2PlayerMove.GotHit(damageAbility);
+                        p2PlayerMove.GotHit(damage);
                     }
                 }
             }
@@ -499,19 +503,31 @@ public class PlayerMove : MonoBehaviour
                     else
                     {
                         Debug.Log("p2Win");
-                        p1PlayerMove.GotHit(damageAbility);
+                        p1PlayerMove.GotHit(damage);
                     }
                 }
             }
+        }
+
+        regenTime -= Time.deltaTime;
+        if(regenTime <= 0f)
+        {
+            hp += regen;
+            if (hp > hpMax) hp = hpMax;
+            regenTime = 1f;
         }
     }
     void AbilitiesChooser(int ability)
     {
         if (ability == 0)
-            damageAbility = 2f;
+            damage ++;
         if (ability == 1)
-            healthAbility = 2;
+            hpMax += 2f;
         if (ability == 2)
             speed *= 1.5f;
+        if (ability == 3)
+            regen += 0.05f;
+        if (ability == 4)
+            regen += 0.1f;
     }
 }
