@@ -63,13 +63,17 @@ public class PlayerMove : MonoBehaviour
 
     public void Start()
     {
-        CardsUI();
+        myDictionary.Add("Damage", 0);
+        myDictionary.Add("Health", 1);
+        myDictionary.Add("Speed", 2);
+        myDictionary.Add("Regen", 3);
         damage = 1f;
         hpMax = 5f;
         regen = 0;
         AbilitiesChooser(0);
         AbilitiesChooser(1);
         AbilitiesChooser(2);
+        AbilitiesChooser(3);
         gameObject.transform.position = new Vector3(0,0,0);
         cooldown = 0f;
         animCooldown = 0f;
@@ -215,8 +219,6 @@ public class PlayerMove : MonoBehaviour
                 }
             }
             animator.SetTrigger("blockhigh");
-            Debug.Log("p1" + p1HBlocked);
-            Debug.Log("p2" + p2HBlocked);
             busy = true;
             animBusy = true;
             animator.SetBool("busy", animBusy);
@@ -257,8 +259,6 @@ public class PlayerMove : MonoBehaviour
                 }
             }
             animator.SetTrigger("blocklow");
-            Debug.Log("p1" + p1LBlocked);
-            Debug.Log("p2" + p2LBlocked);
             busy = true;
             animBusy = true;
             animator.SetBool("busy", animBusy);
@@ -274,7 +274,6 @@ public class PlayerMove : MonoBehaviour
         }
         if(playerIndex == 1)
         {
-            Debug.Log(p2HBlocked);
             return p2HBlocked;
         }
         return false;
@@ -324,19 +323,16 @@ public class PlayerMove : MonoBehaviour
     }
     public void CardsUI()
     {
-        myDictionary.Add("Damage", 0);
-        myDictionary.Add("Health", 1);
-        myDictionary.Add("Speed", 2);
-        int randomInt1 = Random.Range(0, 3);
-        int randomInt2 = Random.Range(0, 3);
+        int randomInt1 = Random.Range(0, 4);
+        int randomInt2 = Random.Range(0, 4);
         while(randomInt2 == randomInt1)
         {
-            randomInt2 = Random.Range(0, 3);
+            randomInt2 = Random.Range(0, 4);
         }
-        int randomInt3 = Random.Range(0, 3);
+        int randomInt3 = Random.Range(0, 4);
         while(randomInt3 == randomInt1 || randomInt3 == randomInt2)
         {
-            randomInt3 = Random.Range(0, 3);
+            randomInt3 = Random.Range(0, 4);
         }
         foreach (KeyValuePair<string, int> kvp in myDictionary)
         {
@@ -353,21 +349,22 @@ public class PlayerMove : MonoBehaviour
     }
     void Update()
     {
-        if (hp <= 0)
+        if(hp <= 0)
         {
+            CardsUI();
             if (playerIndex == 0)
             {
-                ui.P2Win();
+                ui.P1Round();
             }
             if (playerIndex == 1)
             {
-                ui.P1Win();
+                ui.P2Round();
             }
+            hp = 1;
         }
         blockTimer -= Time.deltaTime;
         if (blockTimer <= 0 && blockTimerCheck == true)
         {
-            Debug.Log(blockTimer);
             blockTimerCheck = false;
             blockTimer = 0;
             if (playerIndex == 0)
@@ -482,12 +479,10 @@ public class PlayerMove : MonoBehaviour
                 {
                     if (p2PlayerMove.IsHBlocking())
                     {
-                        Debug.Log("p2HBlocked");
                         cooldown = 1.2f;
                     }
                     else
                     {
-                        Debug.Log("p1Win");
                         p2PlayerMove.GotHit(damage);
                     }
                 }
@@ -498,12 +493,10 @@ public class PlayerMove : MonoBehaviour
                 {
                     if (p1PlayerMove.IsHBlocking())
                     {
-                        Debug.Log("p1HBlocked");
                         cooldown = 1.2f;
                     }
                     else
                     {
-                        Debug.Log("p2Win");
                         p1PlayerMove.GotHit(damage);
                     }
                 }
@@ -520,12 +513,10 @@ public class PlayerMove : MonoBehaviour
                 {
                     if (p2PlayerMove.IsLBlocking())
                     {
-                        Debug.Log("p2LBlocked");
                         cooldown = 1.2f;
                     }
                     else
                     {
-                        Debug.Log("p1Hit");
                         p2PlayerMove.GotHit(damage);
                     }
                 }
@@ -536,12 +527,10 @@ public class PlayerMove : MonoBehaviour
                 {
                     if (p1PlayerMove.IsLBlocking())
                     {
-                        Debug.Log("p1LBlocked");
                         cooldown = 1.2f;
                     }
                     else
                     {
-                        Debug.Log("p2Win");
                         p1PlayerMove.GotHit(damage);
                     }
                 }
@@ -554,6 +543,14 @@ public class PlayerMove : MonoBehaviour
             hp += regen;
             if (hp > hpMax) hp = hpMax;
             regenTime = 1f;
+            if(playerIndex == 0)
+            {
+                p1Slider.value = hp;
+            }
+            if(playerIndex == 1)
+            {
+                p2Slider.value = hp;
+            }
         }
     }
     void AbilitiesChooser(int ability)
@@ -565,7 +562,7 @@ public class PlayerMove : MonoBehaviour
         if (ability == 2)
             speed *= 1.5f;
         if (ability == 3)
-            regen += 0.05f;
+            regen += 0.1f;
         if (ability == 4)
             regen += 0.1f;
     }
