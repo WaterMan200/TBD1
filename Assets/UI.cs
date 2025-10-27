@@ -19,7 +19,8 @@ public class UI : MonoBehaviour
     public GameObject connectorScreen;
     public GameObject gameScreen;
     public GameObject mainScreen;
-    public GameObject cardScreen;
+    public GameObject p1cardScreen;
+    public GameObject p2cardScreen;
     public TextMeshProUGUI gameScreenTimerText;
     public TextMeshProUGUI playerWinText;
 
@@ -68,9 +69,11 @@ public class UI : MonoBehaviour
     {
         if(paused)
         {
-            Time.timeScale = 1f;
             pauseScreen.SetActive(false);
             paused = false;
+            gameScreen.transform.GetChild(0).gameObject.SetActive(true);
+            gameScreen.transform.GetChild(1).gameObject.SetActive(true);
+            startTimer = true;
         }
     }
     public void ControllersConnected()
@@ -109,16 +112,16 @@ public class UI : MonoBehaviour
     public void P1Round()
     {
         gameScreen.SetActive(false);
-        cardScreen.SetActive(true);
-        GameObject button = cardScreen.transform.GetChild(1).gameObject;
+        p1cardScreen.SetActive(true);
+        GameObject button = p1cardScreen.transform.GetChild(1).gameObject;
         EventSystem.current.SetSelectedGameObject(button);
         Time.timeScale = 0f;
     }
     public void P2Round()
     {
         gameScreen.SetActive(false);
-        cardScreen.SetActive(true);
-        GameObject button = cardScreen.transform.GetChild(1).gameObject;
+        p2cardScreen.SetActive(true);
+        GameObject button = p2cardScreen.transform.GetChild(1).gameObject;
         EventSystem.current.SetSelectedGameObject(button);
         Time.timeScale = 0f;
     }
@@ -134,6 +137,19 @@ public class UI : MonoBehaviour
         playerMove2.Start();
         gameScreen.transform.GetChild(0).gameObject.SetActive(true);
         gameScreen.transform.GetChild(1).gameObject.SetActive(true);
+    }
+    public void NextRound()
+    {
+        p1cardScreen.SetActive(false);
+        p2cardScreen.SetActive(false);
+        gameScreen.SetActive(true);
+        PlayerMove playerMove1 = player1.GetComponent<PlayerMove>();
+        PlayerMove playerMove2 = player2.GetComponent<PlayerMove>();
+        playerMove1.Start();
+        playerMove2.Start();
+        gameScreen.transform.GetChild(0).gameObject.SetActive(true);
+        gameScreen.transform.GetChild(1).gameObject.SetActive(true);
+        startTimer = true;
     }
     public void QuitGame()
     {

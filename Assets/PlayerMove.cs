@@ -1,13 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.InputSystem.InputAction;
+using TMPro;
 
 public class PlayerMove : MonoBehaviour
 {
+    [SerializeField] private KeyValuePair<string, int> randomEntry1;
+    [SerializeField] private KeyValuePair<string, int> randomEntry2;
+    [SerializeField] private KeyValuePair<string, int> randomEntry3;
+    [SerializeField] private Dictionary<string, int> myDictionary = new Dictionary<string, int>();
     [SerializeField] public GameObject p1;
     [SerializeField] public GameObject p2;
+    [SerializeField] public TextMeshProUGUI card1;
+    [SerializeField] public TextMeshProUGUI card2;
+    [SerializeField] public TextMeshProUGUI card3;
     [SerializeField] private PlayerMove p1PlayerMove;
     [SerializeField] private PlayerMove p2PlayerMove;
     [SerializeField] private AttackHit attackHit;
@@ -54,6 +63,7 @@ public class PlayerMove : MonoBehaviour
 
     public void Start()
     {
+        CardsUI();
         damage = 1f;
         hpMax = 5f;
         regen = 0;
@@ -307,10 +317,39 @@ public class PlayerMove : MonoBehaviour
     }
     public void Pauser()
     {
-        if(gameStarted)
+        if (gameStarted)
         {
             ui.Pause();
         }
+    }
+    public void CardsUI()
+    {
+        myDictionary.Add("Damage", 0);
+        myDictionary.Add("Health", 1);
+        myDictionary.Add("Speed", 2);
+        int randomInt1 = Random.Range(0, 3);
+        int randomInt2 = Random.Range(0, 3);
+        while(randomInt2 == randomInt1)
+        {
+            randomInt2 = Random.Range(0, 3);
+        }
+        int randomInt3 = Random.Range(0, 3);
+        while(randomInt3 == randomInt1 || randomInt3 == randomInt2)
+        {
+            randomInt3 = Random.Range(0, 3);
+        }
+        foreach (KeyValuePair<string, int> kvp in myDictionary)
+        {
+            if (randomInt1 == kvp.Value)
+                randomEntry1 = kvp;
+            if (randomInt2 == kvp.Value)
+                randomEntry2 = kvp;
+            if (randomInt3 == kvp.Value)
+                randomEntry3 = kvp;
+        }
+        card1.text = $"{randomEntry1.Key}";
+        card2.text = $"{randomEntry2.Key}";
+        card3.text = $"{randomEntry3.Key}";
     }
     void Update()
     {
