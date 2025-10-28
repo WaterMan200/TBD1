@@ -143,13 +143,39 @@ public class UI : MonoBehaviour
         p1cardScreen.SetActive(false);
         p2cardScreen.SetActive(false);
         gameScreen.SetActive(true);
-        PlayerMove playerMove1 = player1.GetComponent<PlayerMove>();
-        PlayerMove playerMove2 = player2.GetComponent<PlayerMove>();
-        playerMove1.Start();
-        playerMove2.Start();
         gameScreen.transform.GetChild(0).gameObject.SetActive(true);
         gameScreen.transform.GetChild(1).gameObject.SetActive(true);
         startTimer = true;
+    }
+    public void P1C1()
+    {
+        PlayerMove playerMove1 = player1.GetComponent<PlayerMove>();
+        playerMove1.AbilitiesChooser(1);
+    }
+    public void P1C2()
+    {
+        PlayerMove playerMove1 = player1.GetComponent<PlayerMove>();
+        playerMove1.AbilitiesChooser(2);
+    }
+    public void P1C3()
+    {
+        PlayerMove playerMove1 = player1.GetComponent<PlayerMove>();
+        playerMove1.AbilitiesChooser(3);
+    }
+    public void P2C1()
+    {
+        PlayerMove playerMove2 = player2.GetComponent<PlayerMove>();
+        playerMove2.AbilitiesChooser(1);
+    }
+    public void P2C2()
+    {
+        PlayerMove playerMove2 = player2.GetComponent<PlayerMove>();
+        playerMove2.AbilitiesChooser(2);
+    }
+    public void P2C3()
+    {
+        PlayerMove playerMove2 = player2.GetComponent<PlayerMove>();
+        playerMove2.AbilitiesChooser(3);
     }
     public void QuitGame()
     {

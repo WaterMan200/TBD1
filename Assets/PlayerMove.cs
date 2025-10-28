@@ -59,22 +59,24 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private float regen;
     [SerializeField] private float regenTime;
-    
+    [SerializeField] private bool dictionaryAdded = false;
+
 
     public void Start()
     {
-        myDictionary.Add("Damage", 0);
-        myDictionary.Add("Health", 1);
-        myDictionary.Add("Speed", 2);
-        myDictionary.Add("Regen", 3);
-        damage = 1f;
-        hpMax = 5f;
-        regen = 0;
-        AbilitiesChooser(0);
-        AbilitiesChooser(1);
-        AbilitiesChooser(2);
-        AbilitiesChooser(3);
-        gameObject.transform.position = new Vector3(0,0,0);
+        if(dictionaryAdded == false)
+        {
+            speed = 5f;
+            damage = 1f;
+            hpMax = 5f;
+            regen = 0;
+            myDictionary.Add("Damage", 0);
+            myDictionary.Add("Health", 1);
+            myDictionary.Add("Speed", 2);
+            myDictionary.Add("Regen", 3);
+            dictionaryAdded = true;
+        }
+        gameObject.transform.position = new Vector3(0, 0, 0);
         cooldown = 0f;
         animCooldown = 0f;
         hp = hpMax;
@@ -101,10 +103,9 @@ public class PlayerMove : MonoBehaviour
         HblockHit = gameObject.transform.GetChild(2).GetComponent<HBlockHit>();
         LblockHit = gameObject.transform.GetChild(3).GetComponent<LBlockHit>();
         busy = false;
-        speed = 5f;
 
         animator.Play("Idle");
-        if(playerIndex == 0)
+        if (playerIndex == 0)
         {
             p1Slider.maxValue = hp;
             p1Slider.value = hp;
@@ -124,7 +125,9 @@ public class PlayerMove : MonoBehaviour
         if(playerIndex == 0)
         {
             if(P1Connected)
+            {
                 return true;
+            }
             return false;
         }
         return false;
@@ -553,8 +556,21 @@ public class PlayerMove : MonoBehaviour
             }
         }
     }
-    void AbilitiesChooser(int ability)
+    public void AbilitiesChooser(int cardChoosen)
     {
+        int ability = 0;
+        if (cardChoosen == 1)
+        {
+            ability = randomEntry1.Value;
+        }
+        else if (cardChoosen == 2)
+        {
+            ability = randomEntry2.Value;
+        }
+        else if(cardChoosen == 3)
+        {
+            ability = randomEntry3.Value;
+        }
         if (ability == 0)
             damage ++;
         if (ability == 1)
@@ -565,5 +581,11 @@ public class PlayerMove : MonoBehaviour
             regen += 0.1f;
         if (ability == 4)
             regen += 0.1f;
+        Debug.Log(ability);
+        Start();
+        if (playerIndex == 0)
+            p2PlayerMove.Start();
+        if (playerIndex == 1)
+            p1PlayerMove.Start();
     }
 }
