@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,8 +59,11 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float damage;
     [SerializeField] private float speed;
     [SerializeField] private float regen;
+    [SerializeField] private float NoMoveRegen;
     [SerializeField] private float regenTime;
     [SerializeField] private bool dictionaryAdded = false;
+    [SerializeField] private float cooldownReduction;
+    [SerializeField] private float stunTimer;
 
 
     public void Start()
@@ -70,10 +74,16 @@ public class PlayerMove : MonoBehaviour
             damage = 1f;
             hpMax = 5f;
             regen = 0;
+            NoMoveRegen = 0;
+            cooldownReduction = 0;
+            stunTimer = 1.2f;
             myDictionary.Add("Damage", 0);
             myDictionary.Add("Health", 1);
             myDictionary.Add("Speed", 2);
             myDictionary.Add("Regen", 3);
+            myDictionary.Add("Still\nRegen", 4);
+            myDictionary.Add("Faster\nCooldown", 5);
+            myDictionary.Add("Stun", 6);
             dictionaryAdded = true;
         }
         gameObject.transform.position = new Vector3(0, 0, 0);
@@ -163,8 +173,8 @@ public class PlayerMove : MonoBehaviour
             busy = true;
             animBusy = true;
             animator.SetBool("busy", animBusy);
-            cooldown = 5/6f;
-            animCooldown = 5/6f;
+            cooldown = 5/6f - cooldownReduction;
+            animCooldown = 5/6f - cooldownReduction;
         }
     }
     public void AttackLow()
@@ -185,8 +195,8 @@ public class PlayerMove : MonoBehaviour
             busy = true;
             animBusy = true;
             animator.SetBool("busy", animBusy);
-            cooldown = 5/6f;
-            animCooldown = 5/6f;
+            cooldown = 5/6f - cooldownReduction;
+            animCooldown = 5/6f - cooldownReduction;
         }
     }
     public void BlockHigh()
@@ -225,8 +235,8 @@ public class PlayerMove : MonoBehaviour
             busy = true;
             animBusy = true;
             animator.SetBool("busy", animBusy);
-            cooldown = 2/3f;
-            animCooldown = 2/3f;
+            cooldown = 2/3f - cooldownReduction;
+            animCooldown = 2/3f - cooldownReduction;
         }
     }
     public void BlockLow()
@@ -265,8 +275,8 @@ public class PlayerMove : MonoBehaviour
             busy = true;
             animBusy = true;
             animator.SetBool("busy", animBusy);
-            cooldown = 2/3f;
-            animCooldown = 2/3f;
+            cooldown = 2/3f - cooldownReduction;
+            animCooldown = 2/3f - cooldownReduction;
         }
     }
     public bool IsHBlocking()
@@ -326,16 +336,16 @@ public class PlayerMove : MonoBehaviour
     }
     public void CardsUI()
     {
-        int randomInt1 = Random.Range(0, 4);
-        int randomInt2 = Random.Range(0, 4);
+        int randomInt1 = Random.Range(0, myDictionary.Count);
+        int randomInt2 = Random.Range(0, myDictionary.Count);
         while(randomInt2 == randomInt1)
         {
-            randomInt2 = Random.Range(0, 4);
+            randomInt2 = Random.Range(0, myDictionary.Count);
         }
-        int randomInt3 = Random.Range(0, 4);
+        int randomInt3 = Random.Range(0, myDictionary.Count);
         while(randomInt3 == randomInt1 || randomInt3 == randomInt2)
         {
-            randomInt3 = Random.Range(0, 4);
+            randomInt3 = Random.Range(0, myDictionary.Count);
         }
         foreach (KeyValuePair<string, int> kvp in myDictionary)
         {
@@ -482,7 +492,7 @@ public class PlayerMove : MonoBehaviour
                 {
                     if (p2PlayerMove.IsHBlocking())
                     {
-                        cooldown = 1.2f;
+                        cooldown = stunTimer;
                     }
                     else
                     {
@@ -496,7 +506,7 @@ public class PlayerMove : MonoBehaviour
                 {
                     if (p1PlayerMove.IsHBlocking())
                     {
-                        cooldown = 1.2f;
+                        cooldown = stunTimer;
                     }
                     else
                     {
@@ -516,7 +526,7 @@ public class PlayerMove : MonoBehaviour
                 {
                     if (p2PlayerMove.IsLBlocking())
                     {
-                        cooldown = 1.2f;
+                        cooldown = stunTimer;
                     }
                     else
                     {
@@ -530,7 +540,7 @@ public class PlayerMove : MonoBehaviour
                 {
                     if (p1PlayerMove.IsLBlocking())
                     {
-                        cooldown = 1.2f;
+                        cooldown = stunTimer;
                     }
                     else
                     {
@@ -544,16 +554,21 @@ public class PlayerMove : MonoBehaviour
         if(regenTime <= 0f)
         {
             hp += regen;
+            if(rb.velocity == 0)
+            {
+                hp += NoMoveRegen;
+            }
             if (hp > hpMax) hp = hpMax;
             regenTime = 1f;
             if(playerIndex == 0)
             {
                 p1Slider.value = hp;
             }
-            if(playerIndex == 1)
+            if (playerIndex == 1)
             {
                 p2Slider.value = hp;
             }
+            regenTime = 1f;
         }
     }
     public void AbilitiesChooser(int cardChoosen)
@@ -580,7 +595,12 @@ public class PlayerMove : MonoBehaviour
         if (ability == 3)
             regen += 0.1f;
         if (ability == 4)
-            regen += 0.1f;
+            NoMoveRegen += 0.2f;
+        if (ability == 5)
+            cooldownReduction += 0.2;
+        if (ability == 6)
+            stunTimer += 0.3;
+        
         Debug.Log(ability);
         Start();
         if (playerIndex == 0)
