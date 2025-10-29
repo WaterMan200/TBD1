@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,7 +50,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private bool HattackHitCheck;
     [SerializeField] private bool LattackHitCheck;
     [SerializeField] public Slider p1Slider;
-    [SerializeField] public Slider p2Slider;
+    [SerializeField] public Slider p2Slider; 
     [SerializeField] private float HblockTimerTwo;
     [SerializeField] private bool HblockTimerCheckTwo;
     [SerializeField] private float LblockTimerTwo;
@@ -64,12 +63,14 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private bool dictionaryAdded = false;
     [SerializeField] private float cooldownReduction;
     [SerializeField] private float stunTimer;
-
+    [SerializeField] private int roundsWon;
+    [SerializeField] public TextMeshProUGUI roundsWonText;
 
     public void Start()
     {
         if(dictionaryAdded == false)
         {
+            roundsWon = 0;
             speed = 5f;
             damage = 1f;
             hpMax = 5f;
@@ -336,14 +337,14 @@ public class PlayerMove : MonoBehaviour
     }
     public void CardsUI()
     {
-        int randomInt1 = Random.Range(0, myDictionary.Count);
-        int randomInt2 = Random.Range(0, myDictionary.Count);
-        while(randomInt2 == randomInt1)
+        int randomInt1 = Random.Range(0, 7);
+        int randomInt2 = Random.Range(0, 7);
+        while (randomInt2 == randomInt1)
         {
             randomInt2 = Random.Range(0, myDictionary.Count);
         }
         int randomInt3 = Random.Range(0, myDictionary.Count);
-        while(randomInt3 == randomInt1 || randomInt3 == randomInt2)
+        while (randomInt3 == randomInt1 || randomInt3 == randomInt2)
         {
             randomInt3 = Random.Range(0, myDictionary.Count);
         }
@@ -360,6 +361,27 @@ public class PlayerMove : MonoBehaviour
         card2.text = $"{randomEntry2.Key}";
         card3.text = $"{randomEntry3.Key}";
     }
+    public bool RoundWin()
+    {
+        roundsWon++;
+        roundsWonText.text = "" + roundsWon;
+        if (roundsWon >= 5)
+        {
+            if (playerIndex == 0)
+            {
+                ui.P1Win();
+            }
+            if (playerIndex == 1)
+            {
+                ui.P2Win();
+            }
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
     void Update()
     {
         if(hp <= 0)
@@ -367,11 +389,13 @@ public class PlayerMove : MonoBehaviour
             CardsUI();
             if (playerIndex == 0)
             {
-                ui.P1Round();
+                if(p2PlayerMove.RoundWin())
+                    ui.P1Round();
             }
             if (playerIndex == 1)
             {
-                ui.P2Round();
+                if(p1PlayerMove.RoundWin())
+                    ui.P2Round();
             }
             hp = 1;
         }
@@ -554,7 +578,7 @@ public class PlayerMove : MonoBehaviour
         if(regenTime <= 0f)
         {
             hp += regen;
-            if(rb.velocity == 0)
+            if(rb.velocity.x == 0)
             {
                 hp += NoMoveRegen;
             }
@@ -597,10 +621,9 @@ public class PlayerMove : MonoBehaviour
         if (ability == 4)
             NoMoveRegen += 0.2f;
         if (ability == 5)
-            cooldownReduction += 0.2;
+            cooldownReduction += 0.2f;
         if (ability == 6)
-            stunTimer += 0.3;
-        
+            stunTimer += 0.3f;
         Debug.Log(ability);
         Start();
         if (playerIndex == 0)

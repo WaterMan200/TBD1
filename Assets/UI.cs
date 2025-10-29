@@ -23,7 +23,11 @@ public class UI : MonoBehaviour
     public GameObject p2cardScreen;
     public TextMeshProUGUI gameScreenTimerText;
     public TextMeshProUGUI playerWinText;
-
+    private float endTimer;
+    private bool p1Timer;
+    private bool p2Timer;
+    private bool p1WinTimer;
+    private bool p2WinTimer;
     void Start()
     {
         timer = 3f;
@@ -31,12 +35,12 @@ public class UI : MonoBehaviour
     }
     void Update()
     {
-        if(startTimer == true)
+        if (startTimer == true)
         {
             timer -= Time.unscaledDeltaTime;
             gameScreenTimerText.text = ("" + Mathf.CeilToInt(timer));
             Debug.Log(timer);
-            if(timer <= 0f)
+            if (timer <= 0f)
             {
                 PlayerMove playerMove1 = player1.GetComponent<PlayerMove>();
                 PlayerMove playerMove2 = player2.GetComponent<PlayerMove>();
@@ -47,6 +51,54 @@ public class UI : MonoBehaviour
                 Time.timeScale = 1f;
                 startTimer = false;
                 timer = 3f;
+            }
+        }
+        if (p1Timer == true)
+        {
+            endTimer -= Time.unscaledDeltaTime;
+            if (endTimer <= 0)
+            {
+                gameScreen.SetActive(false);
+                p1cardScreen.SetActive(true);
+                GameObject button = p1cardScreen.transform.GetChild(1).gameObject;
+                EventSystem.current.SetSelectedGameObject(button);
+                p1Timer = false;
+            }
+        }
+        if (p2Timer == true)
+        {
+            endTimer -= Time.unscaledDeltaTime;
+            if (endTimer <= 0)
+            {
+                gameScreen.SetActive(false);
+                p2cardScreen.SetActive(true);
+                GameObject button = p2cardScreen.transform.GetChild(1).gameObject;
+                EventSystem.current.SetSelectedGameObject(button);
+                p2Timer = false;
+            }
+        }
+        if (p1WinTimer == true)
+        {
+            endTimer -= Time.unscaledDeltaTime;
+            if (endTimer <= 0)
+            {
+                gameScreen.SetActive(false);
+                endScreen.SetActive(true);
+                GameObject button = endScreen.transform.GetChild(1).gameObject;
+                EventSystem.current.SetSelectedGameObject(button);
+                playerWinText.text = "Player 1 Wins";
+            }
+        }
+        if(p2WinTimer == true)
+        {
+            endTimer -= Time.unscaledDeltaTime;
+            if (endTimer <= 0)
+            {
+                gameScreen.SetActive(false);
+                endScreen.SetActive(true);
+                GameObject button = endScreen.transform.GetChild(1).gameObject;
+                EventSystem.current.SetSelectedGameObject(button);
+                playerWinText.text = "Player 2 Wins";
             }
         }
     }
@@ -93,36 +145,26 @@ public class UI : MonoBehaviour
     }
     public void P1Win()
     {
-        gameScreen.SetActive(false);
-        endScreen.SetActive(true);
-        GameObject button = endScreen.transform.GetChild(1).gameObject;
-        EventSystem.current.SetSelectedGameObject(button);
-        playerWinText.text = "Player 1 Wins";
+        p1WinTimer = true;
+        endTimer = 1f;
         Time.timeScale = 0f;
     }
     public void P2Win()
     {
-        gameScreen.SetActive(false);
-        endScreen.SetActive(true);
-        GameObject button = endScreen.transform.GetChild(1).gameObject;
-        EventSystem.current.SetSelectedGameObject(button);
-        playerWinText.text = "Player 2 Wins";
+        p2WinTimer = true;
+        endTimer = 1f;
         Time.timeScale = 0f;
     }
     public void P1Round()
     {
-        gameScreen.SetActive(false);
-        p1cardScreen.SetActive(true);
-        GameObject button = p1cardScreen.transform.GetChild(1).gameObject;
-        EventSystem.current.SetSelectedGameObject(button);
+        p1Timer = true;
+        endTimer = 1f;
         Time.timeScale = 0f;
     }
     public void P2Round()
     {
-        gameScreen.SetActive(false);
-        p2cardScreen.SetActive(true);
-        GameObject button = p2cardScreen.transform.GetChild(1).gameObject;
-        EventSystem.current.SetSelectedGameObject(button);
+        p2Timer = true;
+        endTimer = 1f;
         Time.timeScale = 0f;
     }
     public void RestartGame()
