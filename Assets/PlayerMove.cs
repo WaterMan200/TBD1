@@ -63,8 +63,11 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private bool dictionaryAdded = false;
     [SerializeField] private float cooldownReduction;
     [SerializeField] private float stunTimer;
+    [SerializeField] private float range;
     [SerializeField] private int roundsWon;
     [SerializeField] public TextMeshProUGUI roundsWonText;
+    [SerializeField] private CapsuleCollider2D HAttackCollider;
+    [SerializeField] private CapsuleCollider2D LAttackCollider; 
     [SerializeField] private float jumpForce;
     [SerializeField] public LayerMask groundLayer;
     [SerializeField] public Transform groundCheck;
@@ -82,6 +85,7 @@ public class PlayerMove : MonoBehaviour
             NoMoveRegen = 0;
             cooldownReduction = 0;
             stunTimer = 1.2f;
+            range = 0f;
             myDictionary.Add("Damage", 0);
             myDictionary.Add("Health", 1);
             myDictionary.Add("Speed", 2);
@@ -89,6 +93,8 @@ public class PlayerMove : MonoBehaviour
             myDictionary.Add("Still\nRegen", 4);
             myDictionary.Add("Faster\nCooldown", 5);
             myDictionary.Add("Stun", 6);
+            myDictionary.Add("Range",7);
+
             dictionaryAdded = true;
         }
         jumpForce = 14f;
@@ -112,6 +118,10 @@ public class PlayerMove : MonoBehaviour
         gameStarted = false;
         p1PlayerMove = p1.GetComponent<PlayerMove>();
         p2PlayerMove = p2.GetComponent<PlayerMove>();
+        HAttackCollider = gameObject.transform.GetChild(0).GetComponent<CapsuleCollider2D>();
+        HAttackCollider.size = new Vector2(0.4336568f + range, 0.04112294f);
+        LAttackCollider = gameObject.transform.GetChild(1).GetComponent<CapsuleCollider2D>();
+        LAttackCollider.size = new Vector2(0.9560172f + range, 0.3665857f);
         ui = main.GetComponent<UI>();
         rb = gameObject.GetComponent<Rigidbody2D>();
         attackHit = gameObject.transform.GetChild(0).GetComponent<AttackHit>();
@@ -402,6 +412,11 @@ public class PlayerMove : MonoBehaviour
             return true;
         }
     }
+        public void StunTime()
+    {
+        stunTimer += 0.3f;
+
+    }
     void Update()
     {
         if (hp <= 0)
@@ -633,7 +648,7 @@ public class PlayerMove : MonoBehaviour
                 hp += NoMoveRegen;
             }
             if (hp > hpMax) hp = hpMax;
-            regenTime = 1f;
+
             if(playerIndex == 0)
             {
                 p1Slider.value = hp;
@@ -673,7 +688,18 @@ public class PlayerMove : MonoBehaviour
         if (ability == 5)
             cooldownReduction += 0.1f;
         if (ability == 6)
-            stunTimer += 0.3f;
+        {
+            if (playerIndex == 0)
+            {
+                p2PlayerMove.StunTime();
+            }
+            if (playerIndex == 1)
+            {
+                p1PlayerMove.StunTime();
+            }
+        }
+        if (ability == 7)
+            range += 0.15f;
         Debug.Log(ability);
         Start();
         if (playerIndex == 0)
