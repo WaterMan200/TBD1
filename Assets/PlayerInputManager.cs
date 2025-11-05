@@ -18,9 +18,39 @@ public class PlayerInputManager : MonoBehaviour
     }
     public void OnMove(CallbackContext context)
     {
-        if(playerMove != null)
+        if (playerMove != null)
         {
             playerMove.Moving(context.ReadValue<Vector2>());
+        }
+    }
+    public void OnDash(CallbackContext context)
+    {
+        if (playerMove != null)
+        {
+            if (playerMove.IsBusy() == false)
+            {
+                playerMove.Dash();
+            }
+        }
+    }
+    public void OnCircle(CallbackContext context)
+    {
+        if(playerMove != null)
+        {
+            if(playerMove.IsBusy() == false)
+            {
+                playerMove.Circle();
+            }
+        }
+    }
+    public void OnJump(CallbackContext context)
+    {
+        if(playerMove != null)
+        {
+            if(playerMove.IsBusy() == false)
+            {
+                playerMove.Jump();
+            }
         }
     }
     public void OnHighAttack(CallbackContext context)
@@ -29,8 +59,8 @@ public class PlayerInputManager : MonoBehaviour
         {
             if(playerMove.IsBusy() == false)
             {
-                playerMove.AttackHigh();              
-            }            
+                playerMove.AttackHigh();
+            }
         }
     }
     public void OnLowAttack(CallbackContext context)
@@ -67,7 +97,7 @@ public class PlayerInputManager : MonoBehaviour
     {
         if(playerMove != null)
         {
-            playerMove.Pauser();            
+            playerMove.Pauser();
         }
     }
 }

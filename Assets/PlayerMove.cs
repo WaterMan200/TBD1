@@ -65,10 +65,14 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float stunTimer;
     [SerializeField] private int roundsWon;
     [SerializeField] public TextMeshProUGUI roundsWonText;
+    [SerializeField] private float jumpForce;
+    [SerializeField] public LayerMask groundLayer;
+    [SerializeField] public Transform groundCheck;
+    [SerializeField] private bool isGrounded;
 
     public void Start()
     {
-        if(dictionaryAdded == false)
+        if (dictionaryAdded == false)
         {
             roundsWon = 0;
             speed = 5f;
@@ -87,7 +91,7 @@ public class PlayerMove : MonoBehaviour
             myDictionary.Add("Stun", 6);
             dictionaryAdded = true;
         }
-        gameObject.transform.position = new Vector3(0, 0, 0);
+        jumpForce = 14f;
         cooldown = 0f;
         animCooldown = 0f;
         hp = hpMax;
@@ -118,11 +122,13 @@ public class PlayerMove : MonoBehaviour
         animator.Play("Idle");
         if (playerIndex == 0)
         {
+            gameObject.transform.position = new Vector3(-2, 0, 0);
             p1Slider.maxValue = hp;
             p1Slider.value = hp;
         }
         if (playerIndex == 1)
         {
+            gameObject.transform.position = new Vector3(2, 0, 0);
             p2Slider.maxValue = hp;
             p2Slider.value = hp;
         }
@@ -159,10 +165,24 @@ public class PlayerMove : MonoBehaviour
     }
     public void Moving(Vector2 moveDirection)
     {
-        if(gameStarted)
+        if (gameStarted)
         {
             mover = moveDirection;
         }
+    }
+    public void Dash()
+    {
+        
+    }
+    public void Circle()
+    {
+
+    }
+    public void Jump()
+    {
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+        if(isGrounded)
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
     }
     public void AttackHigh()
     {
@@ -337,8 +357,8 @@ public class PlayerMove : MonoBehaviour
     }
     public void CardsUI()
     {
-        int randomInt1 = Random.Range(0, 7);
-        int randomInt2 = Random.Range(0, 7);
+        int randomInt1 = Random.Range(0, myDictionary.Count);
+        int randomInt2 = Random.Range(0, myDictionary.Count);
         while (randomInt2 == randomInt1)
         {
             randomInt2 = Random.Range(0, myDictionary.Count);
@@ -384,20 +404,50 @@ public class PlayerMove : MonoBehaviour
     }
     void Update()
     {
-        if(hp <= 0)
+        if (hp <= 0)
         {
             CardsUI();
             if (playerIndex == 0)
             {
-                if(p2PlayerMove.RoundWin())
-                    ui.P1Round();
+                if (p2PlayerMove.RoundWin())
+                    ui.P1Win();
             }
             if (playerIndex == 1)
             {
-                if(p1PlayerMove.RoundWin())
+                if (p1PlayerMove.RoundWin())
                     ui.P2Round();
             }
             hp = 1;
+        }
+        if (playerIndex == 0)
+        {
+            if (p2.transform.position.x < gameObject.transform.position.x)
+            {
+                Vector3 currentRotation = transform.eulerAngles;
+                currentRotation.y = 180f;
+                transform.eulerAngles = currentRotation;
+            }
+            if (p2.transform.position.x > gameObject.transform.position.x)
+            {
+                Vector3 currentRotation = transform.eulerAngles;
+                currentRotation.y = 0f;
+                transform.eulerAngles = currentRotation;
+            }
+        }
+        if (playerIndex == 1)
+        {
+            if (p1.transform.position.x > gameObject.transform.position.x)
+            {
+                Vector3 currentRotation = transform.eulerAngles;
+                currentRotation.y = 180f;
+                transform.eulerAngles = currentRotation;
+            }
+            if (p1.transform.position.x < gameObject.transform.position.x)
+            {
+                Vector3 currentRotation = transform.eulerAngles;
+                currentRotation.y = 0f;
+                transform.eulerAngles = currentRotation;
+            }
         }
         blockTimer -= Time.deltaTime;
         if (blockTimer <= 0 && blockTimerCheck == true)
@@ -472,7 +522,7 @@ public class PlayerMove : MonoBehaviour
         cooldown -= Time.deltaTime;
         if (0f >= cooldown)
         {
-            rb.velocity = new Vector2(mover.x*speed, 0f);
+            rb.velocity = new Vector2(mover.x*speed, rb.velocity.y);
 
             if(mover.x == 0)
             {
@@ -611,17 +661,17 @@ public class PlayerMove : MonoBehaviour
             ability = randomEntry3.Value;
         }
         if (ability == 0)
-            damage ++;
+            damage += .5f;
         if (ability == 1)
             hpMax += 2f;
         if (ability == 2)
             speed *= 1.5f;
         if (ability == 3)
-            regen += 0.1f;
+            regen += 0.2f;
         if (ability == 4)
-            NoMoveRegen += 0.2f;
+            NoMoveRegen += 0.4f;
         if (ability == 5)
-            cooldownReduction += 0.2f;
+            cooldownReduction += 0.1f;
         if (ability == 6)
             stunTimer += 0.3f;
         Debug.Log(ability);

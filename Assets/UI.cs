@@ -87,6 +87,7 @@ public class UI : MonoBehaviour
                 GameObject button = endScreen.transform.GetChild(1).gameObject;
                 EventSystem.current.SetSelectedGameObject(button);
                 playerWinText.text = "Player 1 Wins";
+                p1WinTimer = false;
             }
         }
         if(p2WinTimer == true)
@@ -99,6 +100,7 @@ public class UI : MonoBehaviour
                 GameObject button = endScreen.transform.GetChild(1).gameObject;
                 EventSystem.current.SetSelectedGameObject(button);
                 playerWinText.text = "Player 2 Wins";
+                p2WinTimer = false;
             }
         }
     }
