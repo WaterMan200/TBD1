@@ -72,13 +72,19 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] public LayerMask groundLayer;
     [SerializeField] public Transform groundCheck;
     [SerializeField] private bool isGrounded;
+    [SerializeField] private float moveSlow;
+    [SerializeField] private float slowTimer;
+    [SerializeField] private bool slowTimerBool;
+    [SerializeField] private float oldSpeed;
 
     public void Start()
     {
         if (dictionaryAdded == false)
         {
+            myDictionary = new Dictionary<string, int>();
             roundsWon = 0;
             speed = 5f;
+            oldSpeed = speed;
             damage = 1f;
             hpMax = 5f;
             regen = 0;
@@ -93,10 +99,14 @@ public class PlayerMove : MonoBehaviour
             myDictionary.Add("Still\nRegen", 4);
             myDictionary.Add("Faster\nCooldown", 5);
             myDictionary.Add("Stun", 6);
-            myDictionary.Add("Range",7);
-
+            myDictionary.Add("Range", 7);
+            myDictionary.Add("Slowing\nPunches", 8);
             dictionaryAdded = true;
         }
+        speed = oldSpeed;
+        slowTimer = 0f;
+        slowTimerBool = false;
+        roundsWonText.text = "" + roundsWon;
         jumpForce = 14f;
         cooldown = 0f;
         animCooldown = 0f;
@@ -142,6 +152,10 @@ public class PlayerMove : MonoBehaviour
             p2Slider.maxValue = hp;
             p2Slider.value = hp;
         }
+    }
+    public void ChangeDictionary()
+    {
+        dictionaryAdded = false;
     }
     public void RoundStart()
     {
@@ -412,20 +426,34 @@ public class PlayerMove : MonoBehaviour
             return true;
         }
     }
-        public void StunTime()
+    public void StunTime()
     {
         stunTimer += 0.3f;
 
     }
+    public void SlowMovement(float seconds)
+    {
+        if (slowTimerBool == false)
+            oldSpeed = speed;
+        speed = speed / 2;
+        slowTimer = seconds;
+        slowTimerBool = true;
+    }
     void Update()
     {
+        slowTimer -= Time.deltaTime;
+        if(slowTimerBool == true && slowTimer <= 0)
+        {
+            speed = oldSpeed;
+            slowTimerBool = false;
+        }
         if (hp <= 0)
         {
             CardsUI();
             if (playerIndex == 0)
             {
                 if (p2PlayerMove.RoundWin())
-                    ui.P1Win();
+                    ui.P1Round();
             }
             if (playerIndex == 1)
             {
@@ -559,7 +587,7 @@ public class PlayerMove : MonoBehaviour
         }
         else
         {
-            rb.velocity = new Vector2(0, 0f);
+            rb.velocity = new Vector2(0, rb.velocity.y);
             animator.SetBool("walking 0", false);
             animator.SetBool("walk back 0", false);
         }
@@ -586,6 +614,10 @@ public class PlayerMove : MonoBehaviour
                     else
                     {
                         p2PlayerMove.GotHit(damage);
+                        if (moveSlow > 0)
+                        {
+                            p2PlayerMove.SlowMovement(moveSlow);
+                        }
                     }
                 }
             }
@@ -600,6 +632,10 @@ public class PlayerMove : MonoBehaviour
                     else
                     {
                         p1PlayerMove.GotHit(damage);
+                        if (moveSlow > 0)
+                        {
+                            p1PlayerMove.SlowMovement(moveSlow);
+                        }
                     }
                 }
             }
@@ -620,6 +656,10 @@ public class PlayerMove : MonoBehaviour
                     else
                     {
                         p2PlayerMove.GotHit(damage);
+                        if (moveSlow > 0)
+                        {
+                            p1PlayerMove.SlowMovement(moveSlow);
+                        }
                     }
                 }
             }
@@ -634,6 +674,10 @@ public class PlayerMove : MonoBehaviour
                     else
                     {
                         p1PlayerMove.GotHit(damage);
+                        if (moveSlow > 0)
+                        {
+                            p1PlayerMove.SlowMovement(moveSlow);
+                        }
                     }
                 }
             }
@@ -700,6 +744,8 @@ public class PlayerMove : MonoBehaviour
         }
         if (ability == 7)
             range += 0.15f;
+        if (ability == 8)
+            moveSlow += 1f;
         Debug.Log(ability);
         Start();
         if (playerIndex == 0)

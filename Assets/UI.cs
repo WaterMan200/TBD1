@@ -177,6 +177,8 @@ public class UI : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(button);
         PlayerMove playerMove1 = player1.GetComponent<PlayerMove>();
         PlayerMove playerMove2 = player2.GetComponent<PlayerMove>();
+        playerMove1.ChangeDictionary();
+        playerMove2.ChangeDictionary();
         playerMove1.Start();
         playerMove2.Start();
         gameScreen.transform.GetChild(0).gameObject.SetActive(true);

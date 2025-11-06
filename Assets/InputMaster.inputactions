@@ -213,8 +213,8 @@
                 },
                 {
                     "name": "",
-                    "id": "2a7eea9e-c066-4016-9a56-231f75138789",
-                    "path": "<Gamepad>/buttonEast",
+                    "id": "5c08e0ac-c4e1-42db-abd3-e442c78d8dc6",
+                    "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

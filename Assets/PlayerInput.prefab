@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5564134760029124073
+--- !u!1 &6517766602752780344
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,9 +8,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4100349614878699855}
-  - component: {fileID: 8844313261951958414}
-  - component: {fileID: 1781286238484035499}
+  - component: {fileID: 8121392010946933065}
+  - component: {fileID: 146879324071478182}
+  - component: {fileID: 5123634373350312515}
   m_Layer: 0
   m_Name: PlayerInput
   m_TagString: Untagged
@@ -18,13 +18,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4100349614878699855
+--- !u!4 &8121392010946933065
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5564134760029124073}
+  m_GameObject: {fileID: 6517766602752780344}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -32,13 +32,13 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8844313261951958414
+--- !u!114 &146879324071478182
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5564134760029124073}
+  m_GameObject: {fileID: 6517766602752780344}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
@@ -59,7 +59,7 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1781286238484035499}
+      - m_Target: {fileID: 5123634373350312515}
         m_TargetAssemblyTypeName: PlayerInputManager, Assembly-CSharp
         m_MethodName: OnHighAttack
         m_Mode: 0
@@ -75,7 +75,7 @@ MonoBehaviour:
     m_ActionName: Player/Jump
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1781286238484035499}
+      - m_Target: {fileID: 5123634373350312515}
         m_TargetAssemblyTypeName: PlayerInputManager, Assembly-CSharp
         m_MethodName: OnMove
         m_Mode: 0
@@ -91,7 +91,7 @@ MonoBehaviour:
     m_ActionName: Player/Movement
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1781286238484035499}
+      - m_Target: {fileID: 5123634373350312515}
         m_TargetAssemblyTypeName: PlayerInputManager, Assembly-CSharp
         m_MethodName: OnLowAttack
         m_Mode: 0
@@ -107,7 +107,7 @@ MonoBehaviour:
     m_ActionName: Player/AttackLow
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1781286238484035499}
+      - m_Target: {fileID: 5123634373350312515}
         m_TargetAssemblyTypeName: PlayerInputManager, Assembly-CSharp
         m_MethodName: OnHighBlock
         m_Mode: 0
@@ -123,7 +123,7 @@ MonoBehaviour:
     m_ActionName: Player/BlockHigh
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1781286238484035499}
+      - m_Target: {fileID: 5123634373350312515}
         m_TargetAssemblyTypeName: PlayerInputManager, Assembly-CSharp
         m_MethodName: OnLowBlock
         m_Mode: 0
@@ -139,7 +139,7 @@ MonoBehaviour:
     m_ActionName: Player/BlockLow
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1781286238484035499}
+      - m_Target: {fileID: 5123634373350312515}
         m_TargetAssemblyTypeName: PlayerInputManager, Assembly-CSharp
         m_MethodName: OnPause
         m_Mode: 0
@@ -155,7 +155,7 @@ MonoBehaviour:
     m_ActionName: Player/Pause[/XInputControllerWindows/start]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1781286238484035499}
+      - m_Target: {fileID: 5123634373350312515}
         m_TargetAssemblyTypeName: PlayerInputManager, Assembly-CSharp
         m_MethodName: OnJump
         m_Mode: 0
@@ -171,7 +171,7 @@ MonoBehaviour:
     m_ActionName: Player/Jump
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1781286238484035499}
+      - m_Target: {fileID: 5123634373350312515}
         m_TargetAssemblyTypeName: PlayerInputManager, Assembly-CSharp
         m_MethodName: OnDash
         m_Mode: 0
@@ -187,7 +187,7 @@ MonoBehaviour:
     m_ActionName: Player/Dash
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1781286238484035499}
+      - m_Target: {fileID: 5123634373350312515}
         m_TargetAssemblyTypeName: PlayerInputManager, Assembly-CSharp
         m_MethodName: OnCircle
         m_Mode: 0
@@ -206,13 +206,13 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &1781286238484035499
+--- !u!114 &5123634373350312515
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5564134760029124073}
+  m_GameObject: {fileID: 6517766602752780344}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9b9617f6d949f5e41a46eb79253bec57, type: 3}
