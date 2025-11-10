@@ -64,6 +64,10 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float cooldownReduction;
     [SerializeField] private float stunTimer;
     [SerializeField] private float range;
+    [SerializeField] private float dash;
+    [SerializeField] private bool canDash;
+
+    [SerializeField] private float dashDirection;
     [SerializeField] private int roundsWon;
     [SerializeField] public TextMeshProUGUI roundsWonText;
     [SerializeField] private CapsuleCollider2D HAttackCollider;
@@ -92,6 +96,8 @@ public class PlayerMove : MonoBehaviour
             cooldownReduction = 0;
             stunTimer = 1.2f;
             range = 0f;
+            dash = 0;
+            canDash = false;
             myDictionary.Add("Damage", 0);
             myDictionary.Add("Health", 1);
             myDictionary.Add("Speed", 2);
@@ -101,6 +107,7 @@ public class PlayerMove : MonoBehaviour
             myDictionary.Add("Stun", 6);
             myDictionary.Add("Range", 7);
             myDictionary.Add("Slowing\nPunches", 8);
+            myDictionary.Add("Dash", 9);
             dictionaryAdded = true;
         }
         speed = oldSpeed;
@@ -196,7 +203,11 @@ public class PlayerMove : MonoBehaviour
     }
     public void Dash()
     {
-        
+        if(rb.velocity.x != 0f && canDash && dash <=0f)
+        {
+            dashDirection = rb.velocity.x / Mathf.Abs(rb.velocity.x);
+            dash = 2f;
+        }
     }
     public void Circle()
     {
@@ -684,16 +695,16 @@ public class PlayerMove : MonoBehaviour
         }
 
         regenTime -= Time.deltaTime;
-        if(regenTime <= 0f)
+        if (regenTime <= 0f)
         {
             hp += regen;
-            if(rb.velocity.x == 0)
+            if (rb.velocity.x == 0)
             {
                 hp += NoMoveRegen;
             }
             if (hp > hpMax) hp = hpMax;
 
-            if(playerIndex == 0)
+            if (playerIndex == 0)
             {
                 p1Slider.value = hp;
             }
@@ -703,6 +714,12 @@ public class PlayerMove : MonoBehaviour
             }
             regenTime = 1f;
         }
+
+        if (dash > 1.9f)
+        {
+            rb.velocity = new Vector2(30f * dashDirection, 0f);
+        }
+        dash -= Time.deltaTime;
     }
     public void AbilitiesChooser(int cardChoosen)
     {
@@ -746,6 +763,12 @@ public class PlayerMove : MonoBehaviour
             range += 0.15f;
         if (ability == 8)
             moveSlow += 1f;
+        if (ability == 9)
+        {
+            canDash = true;
+            myDictionary.Remove("Dash");
+        }
+            
         Debug.Log(ability);
         Start();
         if (playerIndex == 0)
