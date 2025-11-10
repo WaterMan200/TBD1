@@ -80,16 +80,21 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float slowTimer;
     [SerializeField] private bool slowTimerBool;
     [SerializeField] private float oldSpeed;
+    [SerializeField] private float plusDamageBlock;
+    [SerializeField] private float oldDamage;
+    [SerializeField] private float healOffHit;
 
     public void Start()
     {
         if (dictionaryAdded == false)
         {
             myDictionary = new Dictionary<string, int>();
+            healOffHit = 0f;
             roundsWon = 0;
             speed = 5f;
             oldSpeed = speed;
             damage = 1f;
+            oldDamage = damage;
             hpMax = 5f;
             regen = 0;
             NoMoveRegen = 0;
@@ -108,8 +113,11 @@ public class PlayerMove : MonoBehaviour
             myDictionary.Add("Range", 7);
             myDictionary.Add("Slowing\nPunches", 8);
             myDictionary.Add("Dash", 9);
+            myDictionary.Add("Block\nBuffs\nDamage", 10);
+            myDictionary.Add("Vampirism", 11);
             dictionaryAdded = true;
         }
+        damage = oldDamage;
         speed = oldSpeed;
         slowTimer = 0f;
         slowTimerBool = false;
@@ -224,7 +232,7 @@ public class PlayerMove : MonoBehaviour
         if(gameStarted)
         {
             animator.SetTrigger("attackhigh");
-            HattackHitStarter = 5/12f;
+            HattackHitStarter = 5/12f - cooldownReduction/2;
             HattackHitCheck = true;
             busy = true;
             animBusy = true;
@@ -246,7 +254,7 @@ public class PlayerMove : MonoBehaviour
         if(gameStarted)
         {
             animator.SetTrigger("attacklow");
-            LattackHitStarter = 5/12f;
+            LattackHitStarter = 5/12f - cooldownReduction/2;
             LattackHitCheck = true;
             busy = true;
             animBusy = true;
@@ -392,16 +400,16 @@ public class PlayerMove : MonoBehaviour
     }
     public void CardsUI()
     {
-        int randomInt1 = Random.Range(0, myDictionary.Count);
-        int randomInt2 = Random.Range(0, myDictionary.Count);
+        int randomInt1 = Random.Range(10, 12);
+        int randomInt2 = Random.Range(10, 12);
         while (randomInt2 == randomInt1)
         {
-            randomInt2 = Random.Range(0, myDictionary.Count);
+            randomInt2 = Random.Range(10, 12);
         }
-        int randomInt3 = Random.Range(0, myDictionary.Count);
+        int randomInt3 = Random.Range(10, 12);
         while (randomInt3 == randomInt1 || randomInt3 == randomInt2)
         {
-            randomInt3 = Random.Range(0, myDictionary.Count);
+            randomInt3 = Random.Range(0, 9);
         }
         foreach (KeyValuePair<string, int> kvp in myDictionary)
         {
@@ -449,6 +457,10 @@ public class PlayerMove : MonoBehaviour
         speed = speed / 2;
         slowTimer = seconds;
         slowTimerBool = true;
+    }
+    public void DamageBlock()
+    {
+        damage += plusDamageBlock;
     }
     void Update()
     {
@@ -621,12 +633,19 @@ public class PlayerMove : MonoBehaviour
                     if (p2PlayerMove.IsHBlocking())
                     {
                         cooldown = stunTimer;
+                        p2PlayerMove.DamageBlock();
                     }
                     else
                     {
                         p2PlayerMove.GotHit(damage);
                         if (moveSlow > 0)
                         {
+                        if (healOffHit > 0)
+                        {
+                            hp += healOffHit;
+                            if (hp > hpMax) hp = hpMax;
+                            p1Slider.value = hp;
+                        }
                             p2PlayerMove.SlowMovement(moveSlow);
                         }
                     }
@@ -639,10 +658,17 @@ public class PlayerMove : MonoBehaviour
                     if (p1PlayerMove.IsHBlocking())
                     {
                         cooldown = stunTimer;
+                        p1PlayerMove.DamageBlock();
                     }
                     else
                     {
                         p1PlayerMove.GotHit(damage);
+                        if (healOffHit > 0)
+                        {
+                            hp += healOffHit;
+                            if (hp > hpMax) hp = hpMax;
+                            p2Slider.value = hp;
+                        }
                         if (moveSlow > 0)
                         {
                             p1PlayerMove.SlowMovement(moveSlow);
@@ -663,10 +689,17 @@ public class PlayerMove : MonoBehaviour
                     if (p2PlayerMove.IsLBlocking())
                     {
                         cooldown = stunTimer;
+                        p2PlayerMove.DamageBlock();
                     }
                     else
                     {
                         p2PlayerMove.GotHit(damage);
+                        if (healOffHit > 0)
+                        {
+                            hp += healOffHit;
+                            if (hp > hpMax) hp = hpMax;
+                            p1Slider.value = hp;
+                        }
                         if (moveSlow > 0)
                         {
                             p1PlayerMove.SlowMovement(moveSlow);
@@ -681,10 +714,17 @@ public class PlayerMove : MonoBehaviour
                     if (p1PlayerMove.IsLBlocking())
                     {
                         cooldown = stunTimer;
+                        p1PlayerMove.DamageBlock();
                     }
                     else
                     {
                         p1PlayerMove.GotHit(damage);
+                        if (healOffHit > 0)
+                        {
+                            hp += healOffHit;
+                            if (hp > hpMax) hp = hpMax;
+                            p2Slider.value = hp;
+                        }
                         if (moveSlow > 0)
                         {
                             p1PlayerMove.SlowMovement(moveSlow);
@@ -737,7 +777,10 @@ public class PlayerMove : MonoBehaviour
             ability = randomEntry3.Value;
         }
         if (ability == 0)
+        {
             damage += .5f;
+            oldDamage = damage;
+        }
         if (ability == 1)
             hpMax += 2f;
         if (ability == 2)
@@ -769,6 +812,14 @@ public class PlayerMove : MonoBehaviour
             myDictionary.Remove("Dash");
         }
             
+        if (ability == 10)
+            plusDamageBlock += .25f;
+        if (ability == 11)
+        {
+            damage -= .25f;
+            oldDamage = damage;
+            healOffHit = .4f;
+        }
         Debug.Log(ability);
         Start();
         if (playerIndex == 0)
