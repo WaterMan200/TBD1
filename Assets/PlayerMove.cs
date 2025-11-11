@@ -83,11 +83,14 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float plusDamageBlock;
     [SerializeField] private float oldDamage;
     [SerializeField] private float healOffHit;
+    [SerializeField] private float gameDamage;
+    [SerializeField] private int gamble;
 
     public void Start()
     {
         if (dictionaryAdded == false)
         {
+            Debug.Log("dict");
             myDictionary = new Dictionary<string, int>();
             healOffHit = 0f;
             roundsWon = 0;
@@ -102,7 +105,10 @@ public class PlayerMove : MonoBehaviour
             stunTimer = 1.2f;
             range = 0f;
             dash = 0;
+            moveSlow = 0f;
             canDash = false;
+            plusDamageBlock = 0f;
+            gamble = 0;
             myDictionary.Add("Damage", 0);
             myDictionary.Add("Health", 1);
             myDictionary.Add("Speed", 2);
@@ -115,9 +121,11 @@ public class PlayerMove : MonoBehaviour
             myDictionary.Add("Dash", 9);
             myDictionary.Add("Block\nBuffs\nDamage", 10);
             myDictionary.Add("Vampirism", 11);
+            myDictionary.Add("Gambling", 12);
             dictionaryAdded = true;
         }
         damage = oldDamage;
+        gameDamage = damage;
         speed = oldSpeed;
         slowTimer = 0f;
         slowTimerBool = false;
@@ -398,18 +406,56 @@ public class PlayerMove : MonoBehaviour
             ui.Pause();
         }
     }
+    private void Gambler()
+    {
+        gameDamage = damage;
+        int randomInt1 = Random.Range(1, 5 * gamble);
+        int randomInt2 = Random.Range(1, 11);
+        if (randomInt2 < 3)
+        {
+            damage = damage * randomInt1;
+        }
+        else
+        {
+            damage = damage / randomInt1;
+        }
+    }
     public void CardsUI()
     {
-        int randomInt1 = Random.Range(10, 12);
-        int randomInt2 = Random.Range(10, 12);
+        int randomInt1 = Random.Range(0, 13);
+        if (canDash == true)
+        {
+            randomInt1 = Random.Range(0, 13);
+            while (randomInt1 == 9)
+            {
+                randomInt1 = Random.Range(0, 13);
+            }
+        }
+        int randomInt2 = Random.Range(0, 13);
         while (randomInt2 == randomInt1)
         {
-            randomInt2 = Random.Range(10, 12);
+            randomInt2 = Random.Range(0, 13);
+            if (canDash == true)
+            {
+                randomInt2 = Random.Range(0, 13);
+                while (randomInt2 == 9)
+                {
+                    randomInt2 = Random.Range(0, 13);
+                }
+            }
         }
-        int randomInt3 = Random.Range(10, 12);
+        int randomInt3 = Random.Range(0, 13);
         while (randomInt3 == randomInt1 || randomInt3 == randomInt2)
         {
-            randomInt3 = Random.Range(0, 9);
+            randomInt3 = Random.Range(0, 13);
+            if (canDash == true)
+            {
+                randomInt3 = Random.Range(0, 13);
+                while (randomInt3 == 9)
+                {
+                    randomInt3 = Random.Range(0, 13);
+                }
+            }
         }
         foreach (KeyValuePair<string, int> kvp in myDictionary)
         {
@@ -637,17 +683,25 @@ public class PlayerMove : MonoBehaviour
                     }
                     else
                     {
+                        if (gamble > 0)
+                        {
+                            Gambler();
+                        }
                         p2PlayerMove.GotHit(damage);
                         if (moveSlow > 0)
                         {
-                        if (healOffHit > 0)
-                        {
-                            hp += healOffHit;
-                            if (hp > hpMax) hp = hpMax;
-                            p1Slider.value = hp;
-                        }
+                            if (healOffHit > 0)
+                            {
+                                hp += healOffHit;
+                                if (hp > hpMax) hp = hpMax;
+                                p1Slider.value = hp;
+                            }
                             p2PlayerMove.SlowMovement(moveSlow);
                         }
+                    }
+                    if (gamble > 0)
+                    {
+                        damage = gameDamage;
                     }
                 }
             }
@@ -662,6 +716,10 @@ public class PlayerMove : MonoBehaviour
                     }
                     else
                     {
+                        if (gamble > 0)
+                        {
+                            Gambler();
+                        }
                         p1PlayerMove.GotHit(damage);
                         if (healOffHit > 0)
                         {
@@ -673,6 +731,10 @@ public class PlayerMove : MonoBehaviour
                         {
                             p1PlayerMove.SlowMovement(moveSlow);
                         }
+                    }
+                    if (gamble > 0)
+                    {
+                        damage = gameDamage;
                     }
                 }
             }
@@ -693,6 +755,10 @@ public class PlayerMove : MonoBehaviour
                     }
                     else
                     {
+                        if (gamble > 0)
+                        {
+                            Gambler();
+                        }
                         p2PlayerMove.GotHit(damage);
                         if (healOffHit > 0)
                         {
@@ -704,6 +770,10 @@ public class PlayerMove : MonoBehaviour
                         {
                             p1PlayerMove.SlowMovement(moveSlow);
                         }
+                    }
+                    if (gamble > 0)
+                    {
+                        damage = gameDamage;
                     }
                 }
             }
@@ -718,6 +788,10 @@ public class PlayerMove : MonoBehaviour
                     }
                     else
                     {
+                        if (gamble > 0)
+                        {
+                            Gambler();
+                        }
                         p1PlayerMove.GotHit(damage);
                         if (healOffHit > 0)
                         {
@@ -729,6 +803,10 @@ public class PlayerMove : MonoBehaviour
                         {
                             p1PlayerMove.SlowMovement(moveSlow);
                         }
+                    }
+                    if (gamble > 0)
+                    {
+                        damage = gameDamage;
                     }
                 }
             }
@@ -819,6 +897,10 @@ public class PlayerMove : MonoBehaviour
             damage -= .25f;
             oldDamage = damage;
             healOffHit = .4f;
+        }
+        if (ability == 12)
+        {
+            gamble += 1;
         }
         Debug.Log(ability);
         Start();
