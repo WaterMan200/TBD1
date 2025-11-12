@@ -39,7 +39,6 @@ public class UI : MonoBehaviour
         {
             timer -= Time.unscaledDeltaTime;
             gameScreenTimerText.text = ("" + Mathf.CeilToInt(timer));
-            Debug.Log(timer);
             if (timer <= 0f)
             {
                 PlayerMove playerMove1 = player1.GetComponent<PlayerMove>();

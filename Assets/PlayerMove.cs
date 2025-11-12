@@ -85,12 +85,15 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float healOffHit;
     [SerializeField] private float gameDamage;
     [SerializeField] private int gamble;
+    [SerializeField] private float invisAbility;
+    [SerializeField] private float srTimer;
+    [SerializeField] private bool srTimerCheck;
+    [SerializeField] private SpriteRenderer sr;
 
     public void Start()
     {
         if (dictionaryAdded == false)
         {
-            Debug.Log("dict");
             myDictionary = new Dictionary<string, int>();
             healOffHit = 0f;
             roundsWon = 0;
@@ -109,19 +112,21 @@ public class PlayerMove : MonoBehaviour
             canDash = false;
             plusDamageBlock = 0f;
             gamble = 0;
+            invisAbility = 0f;
             myDictionary.Add("Damage", 0);
             myDictionary.Add("Health", 1);
             myDictionary.Add("Speed", 2);
             myDictionary.Add("Regen", 3);
             myDictionary.Add("Still\nRegen", 4);
             myDictionary.Add("Faster\nCooldown", 5);
-            myDictionary.Add("Stun", 6);
+            myDictionary.Add("Block\nStun", 6);
             myDictionary.Add("Range", 7);
             myDictionary.Add("Slowing\nPunches", 8);
             myDictionary.Add("Dash", 9);
             myDictionary.Add("Block\nBuffs\nDamage", 10);
             myDictionary.Add("Vampirism", 11);
             myDictionary.Add("Gambling", 12);
+            myDictionary.Add("Attacking\nDissapearence", 13);
             dictionaryAdded = true;
         }
         damage = oldDamage;
@@ -129,6 +134,7 @@ public class PlayerMove : MonoBehaviour
         speed = oldSpeed;
         slowTimer = 0f;
         slowTimerBool = false;
+        srTimerCheck = false;
         roundsWonText.text = "" + roundsWon;
         jumpForce = 14f;
         cooldown = 0f;
@@ -145,7 +151,9 @@ public class PlayerMove : MonoBehaviour
         HattackHitCheck = false;
         LattackHitCheck = false;
         blockTimer = 0f;
+        sr = gameObject.transform.GetChild(4).GetComponent<SpriteRenderer>();
         animator = gameObject.transform.GetChild(4).GetComponent<Animator>();
+        sr.enabled = true;
         P1Connected = false;
         P2Connected = false;
         gameStarted = false;
@@ -406,6 +414,15 @@ public class PlayerMove : MonoBehaviour
             ui.Pause();
         }
     }
+    private void Invisable()
+    {
+        if (sr != null)
+        {
+            sr.enabled = false;
+            srTimerCheck = true;
+            srTimer = invisAbility;
+        }
+    }
     private void Gambler()
     {
         gameDamage = damage;
@@ -422,38 +439,35 @@ public class PlayerMove : MonoBehaviour
     }
     public void CardsUI()
     {
-        int randomInt1 = Random.Range(0, 13);
+        int randomInt1 = Random.Range(0, 14);
         if (canDash == true)
         {
-            randomInt1 = Random.Range(0, 13);
             while (randomInt1 == 9)
             {
-                randomInt1 = Random.Range(0, 13);
+                randomInt1 = Random.Range(0, 14);
             }
         }
-        int randomInt2 = Random.Range(0, 13);
+        int randomInt2 = Random.Range(0, 14);
         while (randomInt2 == randomInt1)
         {
-            randomInt2 = Random.Range(0, 13);
+            randomInt2 = Random.Range(0, 14);
             if (canDash == true)
             {
-                randomInt2 = Random.Range(0, 13);
                 while (randomInt2 == 9)
                 {
-                    randomInt2 = Random.Range(0, 13);
+                    randomInt2 = Random.Range(0, 14);
                 }
             }
         }
-        int randomInt3 = Random.Range(0, 13);
+        int randomInt3 = Random.Range(0, 14);
         while (randomInt3 == randomInt1 || randomInt3 == randomInt2)
         {
-            randomInt3 = Random.Range(0, 13);
+            randomInt3 = Random.Range(0, 14);
             if (canDash == true)
             {
-                randomInt3 = Random.Range(0, 13);
                 while (randomInt3 == 9)
                 {
-                    randomInt3 = Random.Range(0, 13);
+                    randomInt3 = Random.Range(0, 14);
                 }
             }
         }
@@ -530,6 +544,12 @@ public class PlayerMove : MonoBehaviour
                     ui.P2Round();
             }
             hp = 1;
+        }
+        srTimer -= Time.deltaTime;
+        if (srTimerCheck = true && srTimer <= 0)
+        {
+            sr.enabled = true;
+            srTimerCheck = false;
         }
         if (playerIndex == 0)
         {
@@ -683,6 +703,10 @@ public class PlayerMove : MonoBehaviour
                     }
                     else
                     {
+                        if (invisAbility > 0)
+                        {
+                            Invisable();
+                        }
                         if (gamble > 0)
                         {
                             Gambler();
@@ -716,6 +740,10 @@ public class PlayerMove : MonoBehaviour
                     }
                     else
                     {
+                        if (invisAbility > 0)
+                        {
+                            Invisable();
+                        }
                         if (gamble > 0)
                         {
                             Gambler();
@@ -755,6 +783,10 @@ public class PlayerMove : MonoBehaviour
                     }
                     else
                     {
+                        if (invisAbility > 0)
+                        {
+                            Invisable();
+                        }
                         if (gamble > 0)
                         {
                             Gambler();
@@ -788,6 +820,10 @@ public class PlayerMove : MonoBehaviour
                     }
                     else
                     {
+                        if (invisAbility > 0)
+                        {
+                            Invisable();
+                        }
                         if (gamble > 0)
                         {
                             Gambler();
@@ -901,6 +937,10 @@ public class PlayerMove : MonoBehaviour
         if (ability == 12)
         {
             gamble += 1;
+        }
+        if (ability == 13)
+        {
+            invisAbility += 1f;
         }
         Debug.Log(ability);
         Start();

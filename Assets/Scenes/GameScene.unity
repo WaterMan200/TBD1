@@ -190,7 +190,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -399,7 +399,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1147,6 +1147,10 @@ PrefabInstance:
     - target: {fileID: 9038789493416348531, guid: 3f4ee5a35eab0b548884fd1ad81f70ce, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9038789493416348533, guid: 3f4ee5a35eab0b548884fd1ad81f70ce, type: 3}
+      propertyPath: m_Bounds.m_Center.y
+      value: -2.090056
       objectReference: {fileID: 0}
     - target: {fileID: 9038789493416348534, guid: 3f4ee5a35eab0b548884fd1ad81f70ce, type: 3}
       propertyPath: m_Name
@@ -3260,6 +3264,18 @@ PrefabInstance:
       propertyPath: m_TagString
       value: P2
       objectReference: {fileID: 0}
+    - target: {fileID: 6656932526720223657, guid: 8e16a018d19dcf54d9359ce2329583a6, type: 3}
+      propertyPath: m_Bounds.m_Center.x
+      value: -3.550114
+      objectReference: {fileID: 0}
+    - target: {fileID: 6656932526720223657, guid: 8e16a018d19dcf54d9359ce2329583a6, type: 3}
+      propertyPath: m_Bounds.m_Center.y
+      value: -2.090056
+      objectReference: {fileID: 0}
+    - target: {fileID: 6656932526720223657, guid: 8e16a018d19dcf54d9359ce2329583a6, type: 3}
+      propertyPath: m_Bounds.m_Extent.x
+      value: 2.1855648
+      objectReference: {fileID: 0}
     - target: {fileID: 6656932526720223658, guid: 8e16a018d19dcf54d9359ce2329583a6, type: 3}
       propertyPath: m_Name
       value: Red Guy
@@ -4737,6 +4753,9 @@ MonoBehaviour:
   cooldownReduction: 0
   stunTimer: 0
   range: 0
+  dash: 0
+  canDash: 0
+  dashDirection: 0
   roundsWon: 0
   roundsWonText: {fileID: 2093446533}
   HAttackCollider: {fileID: 0}
@@ -4751,6 +4770,11 @@ MonoBehaviour:
   slowTimer: 0
   slowTimerBool: 0
   oldSpeed: 0
+  plusDamageBlock: 0
+  oldDamage: 0
+  healOffHit: 0
+  gameDamage: 0
+  gamble: 0
 --- !u!4 &763797623
 Transform:
   m_ObjectHideFlags: 0
@@ -5256,7 +5280,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -5565,10 +5589,10 @@ RectTransform:
   m_Father: {fileID: 1966600550}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 250, y: -68}
-  m_SizeDelta: {x: 342, y: 50}
+  m_AnchoredPosition: {x: -49.25, y: -68}
+  m_SizeDelta: {x: 98.5, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1154525758
 MonoBehaviour:
@@ -6840,6 +6864,9 @@ MonoBehaviour:
   cooldownReduction: 0
   stunTimer: 0
   range: 0
+  dash: 0
+  canDash: 0
+  dashDirection: 0
   roundsWon: 0
   roundsWonText: {fileID: 1154525758}
   HAttackCollider: {fileID: 0}
@@ -6854,6 +6881,11 @@ MonoBehaviour:
   slowTimer: 0
   slowTimerBool: 0
   oldSpeed: 0
+  plusDamageBlock: 0
+  oldDamage: 0
+  healOffHit: 0
+  gameDamage: 0
+  gamble: 0
 --- !u!4 &1319189034
 Transform:
   m_ObjectHideFlags: 0
@@ -9271,9 +9303,9 @@ RectTransform:
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -251.5, y: -68}
-  m_SizeDelta: {x: 345, y: 50}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 52.25, y: -68}
+  m_SizeDelta: {x: 104.5, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2093446533
 MonoBehaviour:
