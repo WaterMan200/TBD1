@@ -89,6 +89,9 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float srTimer;
     [SerializeField] private bool srTimerCheck;
     [SerializeField] private SpriteRenderer sr;
+    [SerializeField] private float self;
+    [SerializeField] private float elderDamage;
+    [SerializeField] private float slowDamage;
 
     public void Start()
     {
@@ -113,6 +116,8 @@ public class PlayerMove : MonoBehaviour
             plusDamageBlock = 0f;
             gamble = 0;
             invisAbility = 0f;
+            self = 0f;
+            slowDamage = 0f;
             myDictionary.Add("Damage", 0);
             myDictionary.Add("Health", 1);
             myDictionary.Add("Speed", 2);
@@ -126,11 +131,14 @@ public class PlayerMove : MonoBehaviour
             myDictionary.Add("Block\nBuffs\nDamage", 10);
             myDictionary.Add("Vampirism", 11);
             myDictionary.Add("Gambling", 12);
-            myDictionary.Add("Attacking\nDissapearence", 13);
+            myDictionary.Add("Attacking\nInvisability", 13);
+            myDictionary.Add("Self\nDamage\nSuperhuman", 14);
+            myDictionary.Add("Damage\nBuildup", 15);
             dictionaryAdded = true;
         }
         damage = oldDamage;
         gameDamage = damage;
+        elderDamage = damage;
         speed = oldSpeed;
         slowTimer = 0f;
         slowTimerBool = false;
@@ -439,35 +447,35 @@ public class PlayerMove : MonoBehaviour
     }
     public void CardsUI()
     {
-        int randomInt1 = Random.Range(0, 14);
+        int randomInt1 = Random.Range(0, 16);
         if (canDash == true)
         {
             while (randomInt1 == 9)
             {
-                randomInt1 = Random.Range(0, 14);
+                randomInt1 = Random.Range(0, 16);
             }
         }
-        int randomInt2 = Random.Range(0, 14);
+        int randomInt2 = Random.Range(0, 16);
         while (randomInt2 == randomInt1)
         {
-            randomInt2 = Random.Range(0, 14);
+            randomInt2 = Random.Range(0, 16);
             if (canDash == true)
             {
                 while (randomInt2 == 9)
                 {
-                    randomInt2 = Random.Range(0, 14);
+                    randomInt2 = Random.Range(0, 16);
                 }
             }
         }
-        int randomInt3 = Random.Range(0, 14);
+        int randomInt3 = Random.Range(0, 16);
         while (randomInt3 == randomInt1 || randomInt3 == randomInt2)
         {
-            randomInt3 = Random.Range(0, 14);
+            randomInt3 = Random.Range(0, 16);
             if (canDash == true)
             {
                 while (randomInt3 == 9)
                 {
-                    randomInt3 = Random.Range(0, 14);
+                    randomInt3 = Random.Range(0, 16);
                 }
             }
         }
@@ -505,9 +513,9 @@ public class PlayerMove : MonoBehaviour
             return true;
         }
     }
-    public void StunTime()
+    public void StunTime(float stun)
     {
-        stunTimer += 0.3f;
+        stunTimer += stun;
 
     }
     public void SlowMovement(float seconds)
@@ -521,6 +529,11 @@ public class PlayerMove : MonoBehaviour
     public void DamageBlock()
     {
         damage += plusDamageBlock;
+        elderDamage = damage;
+    }
+    private void BuildingDamage()
+    {
+        damage *= slowDamage;
     }
     void Update()
     {
@@ -696,6 +709,8 @@ public class PlayerMove : MonoBehaviour
             {
                 if (attackHit.P1Hit())
                 {
+                    hp -= self;
+                    p1Slider.value = hp;
                     if (p2PlayerMove.IsHBlocking())
                     {
                         cooldown = stunTimer;
@@ -703,6 +718,10 @@ public class PlayerMove : MonoBehaviour
                     }
                     else
                     {
+                        if (slowDamage > 0)
+                        {
+                            damage = damage / 10;
+                        }
                         if (invisAbility > 0)
                         {
                             Invisable();
@@ -723,16 +742,26 @@ public class PlayerMove : MonoBehaviour
                             p2PlayerMove.SlowMovement(moveSlow);
                         }
                     }
-                    if (gamble > 0)
+                    if (slowDamage > 0)
+                    {
+                        damage = elderDamage;
+                    }
+                    else if (gamble > 0)
                     {
                         damage = gameDamage;
                     }
+                }
+                if (slowDamage > 0)
+                {
+                    damage = elderDamage;
                 }
             }
             if (playerIndex == 1)
             {
                 if (attackHit.P2Hit())
                 {
+                    hp -= self;
+                    p2Slider.value = hp;
                     if (p1PlayerMove.IsHBlocking())
                     {
                         cooldown = stunTimer;
@@ -740,6 +769,10 @@ public class PlayerMove : MonoBehaviour
                     }
                     else
                     {
+                        if (slowDamage > 0)
+                        {
+                            damage = damage / 10;
+                        }
                         if (invisAbility > 0)
                         {
                             Invisable();
@@ -760,10 +793,18 @@ public class PlayerMove : MonoBehaviour
                             p1PlayerMove.SlowMovement(moveSlow);
                         }
                     }
-                    if (gamble > 0)
+                    if (slowDamage > 0)
+                    {
+                        damage = elderDamage;
+                    }
+                    else if (gamble > 0)
                     {
                         damage = gameDamage;
                     }
+                }
+                if (slowDamage > 0)
+                {
+                    damage = elderDamage;
                 }
             }
         }
@@ -776,6 +817,8 @@ public class PlayerMove : MonoBehaviour
             {
                 if (attackHit.P1Hit())
                 {
+                    hp -= self;
+                    p1Slider.value = hp;
                     if (p2PlayerMove.IsLBlocking())
                     {
                         cooldown = stunTimer;
@@ -783,6 +826,10 @@ public class PlayerMove : MonoBehaviour
                     }
                     else
                     {
+                        if (slowDamage > 0)
+                        {
+                            damage = damage / 10;
+                        }
                         if (invisAbility > 0)
                         {
                             Invisable();
@@ -803,16 +850,26 @@ public class PlayerMove : MonoBehaviour
                             p1PlayerMove.SlowMovement(moveSlow);
                         }
                     }
-                    if (gamble > 0)
+                    if (slowDamage > 0)
+                    {
+                        damage = elderDamage;
+                    }
+                    else if (gamble > 0)
                     {
                         damage = gameDamage;
                     }
+                }
+                if (slowDamage > 0)
+                {
+                    damage = elderDamage;
                 }
             }
             if (playerIndex == 1)
             {
                 if (attackHit.P2Hit())
                 {
+                    hp -= self;
+                    p2Slider.value = hp;
                     if (p1PlayerMove.IsLBlocking())
                     {
                         cooldown = stunTimer;
@@ -820,6 +877,10 @@ public class PlayerMove : MonoBehaviour
                     }
                     else
                     {
+                        if (slowDamage > 0)
+                        {
+                            damage = damage / 10;
+                        }
                         if (invisAbility > 0)
                         {
                             Invisable();
@@ -840,10 +901,18 @@ public class PlayerMove : MonoBehaviour
                             p1PlayerMove.SlowMovement(moveSlow);
                         }
                     }
-                    if (gamble > 0)
+                    if (slowDamage > 0)
+                    {
+                        damage = elderDamage;
+                    }
+                    else if (gamble > 0)
                     {
                         damage = gameDamage;
                     }
+                }
+                if (slowDamage > 0)
+                {
+                    damage = elderDamage;
                 }
             }
         }
@@ -865,6 +934,10 @@ public class PlayerMove : MonoBehaviour
             if (playerIndex == 1)
             {
                 p2Slider.value = hp;
+            }
+            if (slowDamage > 0)
+            {
+                BuildingDamage();
             }
             regenTime = 1f;
         }
@@ -900,26 +973,26 @@ public class PlayerMove : MonoBehaviour
         if (ability == 2)
             speed *= 1.5f;
         if (ability == 3)
-            regen += 0.2f;
+            regen += 0.15f;
         if (ability == 4)
-            NoMoveRegen += 0.4f;
+            NoMoveRegen += 0.3f;
         if (ability == 5)
-            cooldownReduction += 0.1f;
+            cooldownReduction += 0.15f;
         if (ability == 6)
         {
             if (playerIndex == 0)
             {
-                p2PlayerMove.StunTime();
+                p2PlayerMove.StunTime(.4f);
             }
             if (playerIndex == 1)
             {
-                p1PlayerMove.StunTime();
+                p1PlayerMove.StunTime(.4f);
             }
         }
         if (ability == 7)
-            range += 0.15f;
+            range += 0.25f;
         if (ability == 8)
-            moveSlow += 1f;
+            moveSlow += 3f;
         if (ability == 9)
         {
             canDash = true;
@@ -940,7 +1013,36 @@ public class PlayerMove : MonoBehaviour
         }
         if (ability == 13)
         {
-            invisAbility += 1f;
+            invisAbility += .5f;
+        }
+        if (ability == 14)
+        {
+            self += .3f;
+            if (playerIndex == 0)
+            {
+                p2PlayerMove.StunTime(.6f);
+            }
+            if (playerIndex == 1)
+            {
+                p1PlayerMove.StunTime(.6f);
+            }
+            damage += 1f;
+            oldDamage = damage;
+        }
+        if (ability == 15)
+        {
+            if (slowDamage > 0)
+            {
+                slowDamage += .15f;
+            }
+            else
+            {
+                slowDamage += 1.15f;
+            }
+        }
+        if (slowDamage > 0)
+        {
+            elderDamage = damage;
         }
         Debug.Log(ability);
         Start();

@@ -150,6 +150,38 @@ public class UI : MonoBehaviour
         endTimer = 1f;
         Time.timeScale = 0f;
     }
+    public void P1RandomCard()
+    {
+        int randomInt1 = Random.Range(0, 3);
+        if (randomInt1 == 0)
+        {
+            P1C1();
+        }
+        if (randomInt1 == 1)
+        {
+            P1C2();
+        }
+        if (randomInt1 == 2)
+        {
+            P1C3();
+        }
+    }
+    public void P2RandomCard()
+    {
+        int randomInt1 = Random.Range(0, 3);
+        if (randomInt1 == 0)
+        {
+            P2C1();
+        }
+        if (randomInt1 == 1)
+        {
+            P2C2();
+        }
+        if (randomInt1 == 2)
+        {
+            P2C3();
+        }
+    }
     public void P2Win()
     {
         p2WinTimer = true;
