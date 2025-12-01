@@ -25,79 +25,113 @@ public class PlayerInputManager : MonoBehaviour
     }
     public void OnDash(CallbackContext context)
     {
-        if (playerMove != null)
+        if(context.started)
         {
-            if (playerMove.IsBusy() == false)
+            if (playerMove != null)
             {
-                playerMove.Dash();
+                if (playerMove.IsBusy() == false)
+                {
+                    playerMove.Dash();
+                }
             }
         }
     }
     public void OnCircle(CallbackContext context)
     {
-        if(playerMove != null)
+        if(context.started)
         {
-            if(playerMove.IsBusy() == false)
+            if(playerMove != null)
             {
-                playerMove.Circle();
+                if(playerMove.IsBusy() == false)
+                {
+                    playerMove.Circle();
+                }
             }
         }
     }
     public void OnJump(CallbackContext context)
     {
-        if(playerMove != null)
+        if(context.started)
         {
-            if(playerMove.IsBusy() == false)
+            if(playerMove != null)
             {
-                playerMove.Jump();
+                if(playerMove.IsBusy() == false)
+                {
+                    playerMove.Jump();
+                }
+            }
+        }
+        if(context.canceled)
+        {
+            if(playerMove != null)
+            {
+                if(playerMove.IsBusy() == false)
+                {
+                    playerMove.JumpEnd();
+                }
             }
         }
     }
     public void OnHighAttack(CallbackContext context)
     {
-        if(playerMove != null)
+        if(context.started)
         {
-            if(playerMove.IsBusy() == false)
+            if(playerMove != null)
             {
-                playerMove.AttackHigh();
+                if(playerMove.IsBusy() == false)
+                {
+                    playerMove.AttackHigh();
+                }
             }
         }
     }
     public void OnLowAttack(CallbackContext context)
     {
-        if(playerMove != null)
+        if(context.started)
         {
-            if(playerMove.IsBusy() == false)
+            if(playerMove != null)
             {
-                playerMove.AttackLow();
+                if(playerMove.IsBusy() == false)
+                {
+                    playerMove.AttackLow();
+                }
             }
         }
     }
     public void OnHighBlock(CallbackContext context)
     {
-        if(playerMove != null)
+        if(context.started)
         {
-            if(playerMove.IsBusy() == false)
+            if(playerMove != null)
             {
-                playerMove.BlockHigh();
+                if(playerMove.IsBusy() == false)
+                {
+                    playerMove.BlockHigh();
+                }
             }
         }
     }
     public void OnLowBlock(CallbackContext context)
     {
-        if(playerMove != null)
+        if(context.started)
         {
-            if(playerMove.IsBusy() == false)
+            if(playerMove != null)
             {
-                playerMove.BlockLow();
+                if(playerMove.IsBusy() == false)
+                {
+                    playerMove.BlockLow();
+                }
             }
         }
     }
     public void OnPause(CallbackContext context)
     {
-        if(playerMove != null)
+        if(context.started)
         {
-            playerMove.Pauser();
+            if(playerMove != null)
+            {
+                playerMove.Pauser();
+            }
         }
     }
 }

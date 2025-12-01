@@ -92,6 +92,8 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float self;
     [SerializeField] private float elderDamage;
     [SerializeField] private float slowDamage;
+    [SerializeField] private bool floater;
+    [SerializeField] private bool floatingCheck;
 
     public void Start()
     {
@@ -118,6 +120,8 @@ public class PlayerMove : MonoBehaviour
             invisAbility = 0f;
             self = 0f;
             slowDamage = 0f;
+            floater = false;
+            floatingCheck = false;
             myDictionary.Add("Damage", 0);
             myDictionary.Add("Health", 1);
             myDictionary.Add("Speed", 2);
@@ -134,6 +138,7 @@ public class PlayerMove : MonoBehaviour
             myDictionary.Add("Attacking\nInvisability", 13);
             myDictionary.Add("Self\nDamage\nSuperhuman", 14);
             myDictionary.Add("Damage\nBuildup", 15);
+            myDictionary.Add("Floating\nJump", 16);
             dictionaryAdded = true;
         }
         damage = oldDamage;
@@ -250,6 +255,10 @@ public class PlayerMove : MonoBehaviour
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
         if(isGrounded)
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+        if(floater)
+        {
+            floatingCheck = true;
+        }
     }
     public void AttackHigh()
     {
@@ -447,35 +456,77 @@ public class PlayerMove : MonoBehaviour
     }
     public void CardsUI()
     {
-        int randomInt1 = Random.Range(0, 16);
-        if (canDash == true)
+        int randomInt1 = Random.Range(0, 17);
+        if (floater == true && canDash == true)
+        {
+            while (randomInt1 == 16 || randomInt1 == 9)
+            {
+                randomInt1 = Random.Range(0, 17);
+            }
+        }
+        else if (canDash == true)
         {
             while (randomInt1 == 9)
             {
-                randomInt1 = Random.Range(0, 16);
+                randomInt1 = Random.Range(0, 17);
             }
         }
-        int randomInt2 = Random.Range(0, 16);
+        else if (floater == true)
+        {
+            while (randomInt1 == 16)
+            {
+                randomInt1 = Random.Range(0, 17);
+            }
+        }
+        int randomInt2 = Random.Range(0, 17);
         while (randomInt2 == randomInt1)
         {
-            randomInt2 = Random.Range(0, 16);
-            if (canDash == true)
+            randomInt2 = Random.Range(0, 17);
+            if (floater == true && canDash == true)
+            {
+                while (randomInt2 == 16 || randomInt2 == 9)
+                {
+                    randomInt2 = Random.Range(0, 17);
+                }
+            }
+            else if (canDash == true)
             {
                 while (randomInt2 == 9)
                 {
-                    randomInt2 = Random.Range(0, 16);
+                    randomInt2 = Random.Range(0, 17);
+                }
+            }
+            else if (floater == true)
+            {
+                while (randomInt2 == 16)
+                {
+                    randomInt2 = Random.Range(0, 17);
                 }
             }
         }
-        int randomInt3 = Random.Range(0, 16);
+        int randomInt3 = Random.Range(0, 17);
         while (randomInt3 == randomInt1 || randomInt3 == randomInt2)
         {
-            randomInt3 = Random.Range(0, 16);
-            if (canDash == true)
+            randomInt3 = Random.Range(0, 17);
+            if (floater == true && canDash == true)
+            {
+                while (randomInt3 == 16 || randomInt3 == 9)
+                {
+                    randomInt3 = Random.Range(0, 17);
+                }
+            }
+            else if (canDash == true)
             {
                 while (randomInt3 == 9)
                 {
-                    randomInt3 = Random.Range(0, 16);
+                    randomInt3 = Random.Range(0, 17);
+                }
+            }
+            else if (floater == true)
+            {
+                while (randomInt3 == 16)
+                {
+                    randomInt3 = Random.Range(0, 17);
                 }
             }
         }
@@ -534,6 +585,11 @@ public class PlayerMove : MonoBehaviour
     private void BuildingDamage()
     {
         damage *= slowDamage;
+    }
+    public void JumpEnd()
+    {
+        if(floater)
+            floatingCheck = false;
     }
     void Update()
     {
@@ -941,7 +997,10 @@ public class PlayerMove : MonoBehaviour
             }
             regenTime = 1f;
         }
-
+        if(floatingCheck && rb.velocity.y <= 0)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, 0f);
+        }
         if (dash > 1.9f)
         {
             rb.velocity = new Vector2(30f * dashDirection, 0f);
@@ -1039,6 +1098,10 @@ public class PlayerMove : MonoBehaviour
             {
                 slowDamage += 1.15f;
             }
+        }
+        if (ability == 16)
+        {
+            floater = true;
         }
         if (slowDamage > 0)
         {
