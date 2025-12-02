@@ -66,7 +66,6 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float range;
     [SerializeField] private float dash;
     [SerializeField] private bool canDash;
-
     [SerializeField] private float dashDirection;
     [SerializeField] private int roundsWon;
     [SerializeField] public TextMeshProUGUI roundsWonText;
@@ -89,11 +88,15 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float srTimer;
     [SerializeField] private bool srTimerCheck;
     [SerializeField] private SpriteRenderer sr;
+    [SerializeField] public GameObject circle;
+    [SerializeField] private Circle cScript;
+    [SerializeField] private float circleCooldown;
     [SerializeField] private float self;
     [SerializeField] private float elderDamage;
     [SerializeField] private float slowDamage;
     [SerializeField] private bool floater;
     [SerializeField] private bool floatingCheck;
+    [SerializeField] private bool projectile;
 
     public void Start()
     {
@@ -122,6 +125,7 @@ public class PlayerMove : MonoBehaviour
             slowDamage = 0f;
             floater = false;
             floatingCheck = false;
+            projectile = false;
             myDictionary.Add("Damage", 0);
             myDictionary.Add("Health", 1);
             myDictionary.Add("Speed", 2);
@@ -139,6 +143,7 @@ public class PlayerMove : MonoBehaviour
             myDictionary.Add("Self\nDamage\nSuperhuman", 14);
             myDictionary.Add("Damage\nBuildup", 15);
             myDictionary.Add("Floating\nJump", 16);
+            myDictionary.Add("Projectile", 17);
             dictionaryAdded = true;
         }
         damage = oldDamage;
@@ -152,6 +157,7 @@ public class PlayerMove : MonoBehaviour
         jumpForce = 14f;
         cooldown = 0f;
         animCooldown = 0f;
+        circleCooldown = 0f;
         hp = hpMax;
         regenTime = 1f;
         p1HBlocked = false;
@@ -181,6 +187,7 @@ public class PlayerMove : MonoBehaviour
         attackHit = gameObject.transform.GetChild(0).GetComponent<AttackHit>();
         HblockHit = gameObject.transform.GetChild(2).GetComponent<HBlockHit>();
         LblockHit = gameObject.transform.GetChild(3).GetComponent<LBlockHit>();
+        cScript = circle.GetComponent<Circle>();
         busy = false;
 
         animator.Play("Idle");
@@ -248,7 +255,27 @@ public class PlayerMove : MonoBehaviour
     }
     public void Circle()
     {
+        if(gameStarted && projectile)
+        {
+            if(playerIndex == 0)
+            {
+                if(circleCooldown <= 0)
+                {
+                cScript.Shoot(p1.transform, 0, p2);
+                circleCooldown = 1f;
+                }
+            }
+            else if(playerIndex == 1)
+            {
+                if(circleCooldown <= 0)
+                {
+                cScript.Shoot(p2.transform, 180, p1);
+                circleCooldown = 1f;
+                }
+            }
+        }
 
+            
     }
     public void Jump()
     {
@@ -456,77 +483,77 @@ public class PlayerMove : MonoBehaviour
     }
     public void CardsUI()
     {
-        int randomInt1 = Random.Range(0, 17);
+        int randomInt1 = Random.Range(0, 18);
         if (floater == true && canDash == true)
         {
             while (randomInt1 == 16 || randomInt1 == 9)
             {
-                randomInt1 = Random.Range(0, 17);
+                randomInt1 = Random.Range(0, 18);
             }
         }
         else if (canDash == true)
         {
             while (randomInt1 == 9)
             {
-                randomInt1 = Random.Range(0, 17);
+                randomInt1 = Random.Range(0, 18);
             }
         }
         else if (floater == true)
         {
             while (randomInt1 == 16)
             {
-                randomInt1 = Random.Range(0, 17);
+                randomInt1 = Random.Range(0, 18);
             }
         }
-        int randomInt2 = Random.Range(0, 17);
+        int randomInt2 = Random.Range(0, 18);
         while (randomInt2 == randomInt1)
         {
-            randomInt2 = Random.Range(0, 17);
+            randomInt2 = Random.Range(0, 18);
             if (floater == true && canDash == true)
             {
                 while (randomInt2 == 16 || randomInt2 == 9)
                 {
-                    randomInt2 = Random.Range(0, 17);
+                    randomInt2 = Random.Range(0, 18);
                 }
             }
             else if (canDash == true)
             {
                 while (randomInt2 == 9)
                 {
-                    randomInt2 = Random.Range(0, 17);
+                    randomInt2 = Random.Range(0, 18);
                 }
             }
             else if (floater == true)
             {
                 while (randomInt2 == 16)
                 {
-                    randomInt2 = Random.Range(0, 17);
+                    randomInt2 = Random.Range(0, 18);
                 }
             }
         }
-        int randomInt3 = Random.Range(0, 17);
+        int randomInt3 = Random.Range(0, 18);
         while (randomInt3 == randomInt1 || randomInt3 == randomInt2)
         {
-            randomInt3 = Random.Range(0, 17);
+            randomInt3 = Random.Range(0, 18);
             if (floater == true && canDash == true)
             {
                 while (randomInt3 == 16 || randomInt3 == 9)
                 {
-                    randomInt3 = Random.Range(0, 17);
+                    randomInt3 = Random.Range(0, 18);
                 }
             }
             else if (canDash == true)
             {
                 while (randomInt3 == 9)
                 {
-                    randomInt3 = Random.Range(0, 17);
+                    randomInt3 = Random.Range(0, 18);
                 }
             }
             else if (floater == true)
             {
                 while (randomInt3 == 16)
                 {
-                    randomInt3 = Random.Range(0, 17);
+                    randomInt3 = Random.Range(0, 18);
                 }
             }
         }
@@ -1006,6 +1033,7 @@ public class PlayerMove : MonoBehaviour
             rb.velocity = new Vector2(30f * dashDirection, 0f);
         }
         dash -= Time.deltaTime;
+        circleCooldown -= Time.deltaTime;
     }
     public void AbilitiesChooser(int cardChoosen)
     {
@@ -1049,13 +1077,12 @@ public class PlayerMove : MonoBehaviour
             }
         }
         if (ability == 7)
-            range += 0.25f;
+            range += 0.4f;
         if (ability == 8)
             moveSlow += 3f;
         if (ability == 9)
         {
             canDash = true;
-            myDictionary.Remove("Dash");
         }
             
         if (ability == 10)
@@ -1106,6 +1133,10 @@ public class PlayerMove : MonoBehaviour
         if (slowDamage > 0)
         {
             elderDamage = damage;
+        }
+        if (ability == 17)
+        {
+            projectile = true;
         }
         Debug.Log(ability);
         Start();

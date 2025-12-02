@@ -12,6 +12,8 @@ TagManager:
   - AttackTriggerP1L
   - AttackTriggerP2H
   - AttackTriggerP2L
+  - p1c
+  - p2c
   layers:
   - Default
   - TransparentFX
