@@ -484,7 +484,28 @@ public class PlayerMove : MonoBehaviour
     public void CardsUI()
     {
         int randomInt1 = Random.Range(0, 18);
-        if (floater == true && canDash == true)
+        if (projectile == true && floater == true && canDash == true)
+        {
+            while (randomInt1 == 16 || randomInt1 == 9 || randomInt1 = 17)
+            {
+                randomInt1 = Random.Range(0, 18);
+            }
+        }
+        else if (projectile && canDash == true)
+        {
+            while (randomInt1 == 9 || randomInt1 = 17)
+            {
+                randomInt1 = Random.Range(0, 18);
+            }
+        }
+        else if (projectile && floater == true)
+        {
+            while (randomInt1 == 16 || randomInt1 = 17)
+            {
+                randomInt1 = Random.Range(0, 18);
+            }
+        }
+        else if (floater == true && canDash == true)
         {
             while (randomInt1 == 16 || randomInt1 == 9)
             {
@@ -505,11 +526,39 @@ public class PlayerMove : MonoBehaviour
                 randomInt1 = Random.Range(0, 18);
             }
         }
+        else if (projectile == true)
+        {
+            while (randomInt1 == 17)
+            {
+                randomInt1 = Random.Range(0, 18);
+            }
+        }
         int randomInt2 = Random.Range(0, 18);
         while (randomInt2 == randomInt1)
         {
             randomInt2 = Random.Range(0, 18);
-            if (floater == true && canDash == true)
+            if (projectile == true && floater == true && canDash == true)
+            {
+                while (randomInt2 == 16 || randomInt2 == 9 || randomInt2 = 17)
+                {
+                    randomInt2 = Random.Range(0, 18);
+                }
+            }
+            else if (projectile && canDash == true)
+            {
+                while (randomInt2 == 9 || randomInt2 = 17)
+                {
+                    randomInt2 = Random.Range(0, 18);
+                }
+            }
+            else if (projectile && floater == true)
+            {
+                while (randomInt2 == 16 || randomInt2 = 17)
+                {
+                    randomInt2 = Random.Range(0, 18);
+                }
+            }
+            else if (floater == true && canDash == true)
             {
                 while (randomInt2 == 16 || randomInt2 == 9)
                 {
@@ -530,12 +579,40 @@ public class PlayerMove : MonoBehaviour
                     randomInt2 = Random.Range(0, 18);
                 }
             }
+            else if (projectile == true)
+            {
+                while (randomInt2 == 17)
+                {
+                    randomInt2 = Random.Range(0, 18);
+                }
+            }
         }
         int randomInt3 = Random.Range(0, 18);
         while (randomInt3 == randomInt1 || randomInt3 == randomInt2)
         {
             randomInt3 = Random.Range(0, 18);
-            if (floater == true && canDash == true)
+            if (projectile == true && floater == true && canDash == true)
+            {
+                while (randomInt3 == 16 || randomInt3 == 9 || randomInt3 = 17)
+                {
+                    randomInt3 = Random.Range(0, 18);
+                }
+            }
+            else if (projectile && canDash == true)
+            {
+                while (randomInt3 == 9 || randomInt3 = 17)
+                {
+                    randomInt3 = Random.Range(0, 18);
+                }
+            }
+            else if (projectile && floater == true)
+            {
+                while (randomInt3 == 16 || randomInt3 = 17)
+                {
+                    randomInt3 = Random.Range(0, 18);
+                }
+            }
+            else if (floater == true && canDash == true)
             {
                 while (randomInt3 == 16 || randomInt3 == 9)
                 {
@@ -552,6 +629,13 @@ public class PlayerMove : MonoBehaviour
             else if (floater == true)
             {
                 while (randomInt3 == 16)
+                {
+                    randomInt3 = Random.Range(0, 18);
+                }
+            }
+            else if (projectile == true)
+            {
+                while (randomInt3 == 17)
                 {
                     randomInt3 = Random.Range(0, 18);
                 }

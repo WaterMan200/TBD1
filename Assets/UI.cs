@@ -28,13 +28,18 @@ public class UI : MonoBehaviour
     private bool p2Timer;
     private bool p1WinTimer;
     private bool p2WinTimer;
+    public TextMeshProUGUI timeText;
+    private float timerText;
     void Start()
     {
         timer = 3f;
+        timerText = 0f;
         Time.timeScale = 0f;
     }
     void Update()
     {
+        timerText += Time.deltaTime;
+        timeText.text = "" + Mathf.Floor(timerText);
         if (startTimer == true)
         {
             timer -= Time.unscaledDeltaTime;
@@ -149,6 +154,8 @@ public class UI : MonoBehaviour
         p1WinTimer = true;
         endTimer = 1f;
         Time.timeScale = 0f;
+        timerText = 0f;
+        timeText.text = "" + Mathf.Floor(timerText);
     }
     public void P1RandomCard()
     {
@@ -187,18 +194,24 @@ public class UI : MonoBehaviour
         p2WinTimer = true;
         endTimer = 1f;
         Time.timeScale = 0f;
+        timerText = 0f;
+        timeText.text = "" + Mathf.Floor(timerText);
     }
     public void P1Round()
     {
         p1Timer = true;
         endTimer = 1f;
         Time.timeScale = 0f;
+        timerText = 0f;
+        timeText.text = "" + Mathf.Floor(timerText);
     }
     public void P2Round()
     {
         p2Timer = true;
         endTimer = 1f;
         Time.timeScale = 0f;
+        timerText = 0f;
+        timeText.text = "" + Mathf.Floor(timerText);
     }
     public void RestartGame()
     {
