@@ -625,9 +625,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 67862222}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.002, y: -1.037, z: 0}
-  m_LocalScale: {x: -1, y: 1, z: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.2, y: -1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 763797623}
   m_RootOrder: 2
@@ -2030,22 +2030,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1688200553875423929, guid: 171aba586275dfe40a4497a25ca43a5f, type: 3}
   m_PrefabInstance: {fileID: 396292470153045970}
   m_PrefabAsset: {fileID: 0}
---- !u!58 &194242119
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 194242118}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.5
 --- !u!1 &214172781
 GameObject:
   m_ObjectHideFlags: 0
@@ -4647,7 +4631,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 741132642}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.519, y: -1.691, z: 0}
+  m_LocalPosition: {x: -0.575, y: -1.697, z: 0}
   m_LocalScale: {x: -1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 763797623}
@@ -4813,15 +4797,15 @@ MonoBehaviour:
   circle: {fileID: 194242118}
   cScript: {fileID: 0}
   circleCooldown: 0
-  invisAbility: 0
-  srTimer: 0
-  srTimerCheck: 0
-  sr: {fileID: 0}
   self: 0
   elderDamage: 0
   slowDamage: 0
   floater: 0
   floatingCheck: 0
+  projectile: 0
+  numUnavaliable: 
+  done: 0
+  tie: 0
 --- !u!4 &763797623
 Transform:
   m_ObjectHideFlags: 0
@@ -4868,7 +4852,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 782283808}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.078, y: -1.044, z: 0}
+  m_LocalPosition: {x: 0.2, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1319189034}
@@ -5210,7 +5194,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 876597069}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.869, y: -1.043, z: 0}
+  m_LocalPosition: {x: -0.917, y: -1.046, z: 0}
   m_LocalScale: {x: -1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 763797623}
@@ -5703,9 +5687,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1101743935}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.17, y: -1.61, z: 0}
-  m_LocalScale: {x: -1, y: 1, z: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -1.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 763797623}
   m_RootOrder: 3
@@ -5724,7 +5708,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: -0.10715461}
-  m_Size: {x: 0.5, y: 0.7856908}
+  m_Size: {x: 0.8, y: 0.7856908}
   m_Direction: 0
 --- !u!114 &1101743938
 MonoBehaviour:
@@ -7093,15 +7077,15 @@ MonoBehaviour:
   circle: {fileID: 194242118}
   cScript: {fileID: 0}
   circleCooldown: 0
-  invisAbility: 0
-  srTimer: 0
-  srTimerCheck: 0
-  sr: {fileID: 0}
   self: 0
   elderDamage: 0
   slowDamage: 0
   floater: 0
   floatingCheck: 0
+  projectile: 0
+  numUnavaliable: 
+  done: 0
+  tie: 0
 --- !u!4 &1319189034
 Transform:
   m_ObjectHideFlags: 0
@@ -8318,7 +8302,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1723831719}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.097, y: -1.654, z: 0}
+  m_LocalPosition: {x: 0, y: -1.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1319189034}
@@ -8338,7 +8322,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: -0.099678755}
-  m_Size: {x: 0.5, y: 0.8006425}
+  m_Size: {x: 0.8, y: 0.8006425}
   m_Direction: 0
 --- !u!114 &1723831722
 MonoBehaviour:

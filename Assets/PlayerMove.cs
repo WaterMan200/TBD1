@@ -97,11 +97,14 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private bool floater;
     [SerializeField] private bool floatingCheck;
     [SerializeField] private bool projectile;
-
+    [SerializeField] private List<int> numUnavaliable;
+    [SerializeField] private bool done;
+    [SerializeField] private bool tie;
     public void Start()
     {
         if (dictionaryAdded == false)
         {
+            numUnavaliable = new List<int>();
             myDictionary = new Dictionary<string, int>();
             healOffHit = 0f;
             roundsWon = 0;
@@ -146,6 +149,8 @@ public class PlayerMove : MonoBehaviour
             myDictionary.Add("Projectile", 17);
             dictionaryAdded = true;
         }
+        tie = false;
+        done = false;
         damage = oldDamage;
         gameDamage = damage;
         elderDamage = damage;
@@ -189,7 +194,6 @@ public class PlayerMove : MonoBehaviour
         LblockHit = gameObject.transform.GetChild(3).GetComponent<LBlockHit>();
         cScript = circle.GetComponent<Circle>();
         busy = false;
-
         animator.Play("Idle");
         if (playerIndex == 0)
         {
@@ -484,160 +488,44 @@ public class PlayerMove : MonoBehaviour
     public void CardsUI()
     {
         int randomInt1 = Random.Range(0, 18);
-        if (projectile == true && floater == true && canDash == true)
+        bool validNum = false;
+        while (validNum == false)
         {
-            while (randomInt1 == 16 || randomInt1 == 9 || randomInt1 = 17)
+            validNum = true;
+            randomInt1 = Random.Range(0, 18);
+            foreach (int n in numUnavaliable)
             {
-                randomInt1 = Random.Range(0, 18);
-            }
-        }
-        else if (projectile && canDash == true)
-        {
-            while (randomInt1 == 9 || randomInt1 = 17)
-            {
-                randomInt1 = Random.Range(0, 18);
-            }
-        }
-        else if (projectile && floater == true)
-        {
-            while (randomInt1 == 16 || randomInt1 = 17)
-            {
-                randomInt1 = Random.Range(0, 18);
-            }
-        }
-        else if (floater == true && canDash == true)
-        {
-            while (randomInt1 == 16 || randomInt1 == 9)
-            {
-                randomInt1 = Random.Range(0, 18);
-            }
-        }
-        else if (canDash == true)
-        {
-            while (randomInt1 == 9)
-            {
-                randomInt1 = Random.Range(0, 18);
-            }
-        }
-        else if (floater == true)
-        {
-            while (randomInt1 == 16)
-            {
-                randomInt1 = Random.Range(0, 18);
-            }
-        }
-        else if (projectile == true)
-        {
-            while (randomInt1 == 17)
-            {
-                randomInt1 = Random.Range(0, 18);
+                if (randomInt1 == n)
+                {
+                    validNum = false;
+                }
             }
         }
         int randomInt2 = Random.Range(0, 18);
-        while (randomInt2 == randomInt1)
+        validNum = false;
+        while (validNum == false || randomInt2 == randomInt1)
         {
+            validNum = true;
             randomInt2 = Random.Range(0, 18);
-            if (projectile == true && floater == true && canDash == true)
+            foreach (int n in numUnavaliable)
             {
-                while (randomInt2 == 16 || randomInt2 == 9 || randomInt2 = 17)
+                if (randomInt2 == n)
                 {
-                    randomInt2 = Random.Range(0, 18);
-                }
-            }
-            else if (projectile && canDash == true)
-            {
-                while (randomInt2 == 9 || randomInt2 = 17)
-                {
-                    randomInt2 = Random.Range(0, 18);
-                }
-            }
-            else if (projectile && floater == true)
-            {
-                while (randomInt2 == 16 || randomInt2 = 17)
-                {
-                    randomInt2 = Random.Range(0, 18);
-                }
-            }
-            else if (floater == true && canDash == true)
-            {
-                while (randomInt2 == 16 || randomInt2 == 9)
-                {
-                    randomInt2 = Random.Range(0, 18);
-                }
-            }
-            else if (canDash == true)
-            {
-                while (randomInt2 == 9)
-                {
-                    randomInt2 = Random.Range(0, 18);
-                }
-            }
-            else if (floater == true)
-            {
-                while (randomInt2 == 16)
-                {
-                    randomInt2 = Random.Range(0, 18);
-                }
-            }
-            else if (projectile == true)
-            {
-                while (randomInt2 == 17)
-                {
-                    randomInt2 = Random.Range(0, 18);
+                    validNum = false;
                 }
             }
         }
         int randomInt3 = Random.Range(0, 18);
-        while (randomInt3 == randomInt1 || randomInt3 == randomInt2)
+        validNum = false;
+        while (validNum == false || randomInt3 == randomInt1 || randomInt3 == randomInt2)
         {
+            validNum = true;
             randomInt3 = Random.Range(0, 18);
-            if (projectile == true && floater == true && canDash == true)
+            foreach (int n in numUnavaliable)
             {
-                while (randomInt3 == 16 || randomInt3 == 9 || randomInt3 = 17)
+                if (randomInt3 == n)
                 {
-                    randomInt3 = Random.Range(0, 18);
-                }
-            }
-            else if (projectile && canDash == true)
-            {
-                while (randomInt3 == 9 || randomInt3 = 17)
-                {
-                    randomInt3 = Random.Range(0, 18);
-                }
-            }
-            else if (projectile && floater == true)
-            {
-                while (randomInt3 == 16 || randomInt3 = 17)
-                {
-                    randomInt3 = Random.Range(0, 18);
-                }
-            }
-            else if (floater == true && canDash == true)
-            {
-                while (randomInt3 == 16 || randomInt3 == 9)
-                {
-                    randomInt3 = Random.Range(0, 18);
-                }
-            }
-            else if (canDash == true)
-            {
-                while (randomInt3 == 9)
-                {
-                    randomInt3 = Random.Range(0, 18);
-                }
-            }
-            else if (floater == true)
-            {
-                while (randomInt3 == 16)
-                {
-                    randomInt3 = Random.Range(0, 18);
-                }
-            }
-            else if (projectile == true)
-            {
-                while (randomInt3 == 17)
-                {
-                    randomInt3 = Random.Range(0, 18);
+                    validNum = false;
                 }
             }
         }
@@ -702,6 +590,20 @@ public class PlayerMove : MonoBehaviour
         if(floater)
             floatingCheck = false;
     }
+    public void SubtractWin()
+    {
+        roundsWon--;
+        roundsWonText.text = "" + roundsWon;
+    }
+    public float CheckHP()
+    {
+        return hp;
+    }
+    public void DoubleDeath()
+    {
+        done = true;
+        tie = true;
+    }
     void Update()
     {
         slowTimer -= Time.deltaTime;
@@ -712,18 +614,42 @@ public class PlayerMove : MonoBehaviour
         }
         if (hp <= 0)
         {
-            CardsUI();
-            if (playerIndex == 0)
+            if (done == false)
             {
-                if (p2PlayerMove.RoundWin())
-                    ui.P1Round();
+                if (playerIndex == 0)
+                {
+                    if (p2PlayerMove.CheckHP() <= 0)
+                    {
+                        ui.TieGame();
+                        p2PlayerMove.DoubleDeath();
+                        tie = true;
+                    }
+                }
+                if (playerIndex == 1)
+                {
+                    if (p1PlayerMove.CheckHP() <= 0)
+                    {
+                        ui.TieGame();
+                        p1PlayerMove.DoubleDeath();
+                        tie = true;
+                    }
+                }
+                if (tie == false)
+                {
+                    CardsUI();
+                    if (playerIndex == 0)
+                    {
+                        if (p2PlayerMove.RoundWin())
+                            ui.P1Round();
+                    }
+                    if (playerIndex == 1)
+                    {
+                        if (p1PlayerMove.RoundWin())
+                            ui.P2Round();
+                    }
+                }
+                done = true;
             }
-            if (playerIndex == 1)
-            {
-                if (p1PlayerMove.RoundWin())
-                    ui.P2Round();
-            }
-            hp = 1;
         }
         srTimer -= Time.deltaTime;
         if (srTimerCheck = true && srTimer <= 0)
@@ -1167,6 +1093,7 @@ public class PlayerMove : MonoBehaviour
         if (ability == 9)
         {
             canDash = true;
+            numUnavaliable.Add(9);
         }
             
         if (ability == 10)
@@ -1213,6 +1140,7 @@ public class PlayerMove : MonoBehaviour
         if (ability == 16)
         {
             floater = true;
+            numUnavaliable.Add(16);
         }
         if (slowDamage > 0)
         {
@@ -1221,6 +1149,7 @@ public class PlayerMove : MonoBehaviour
         if (ability == 17)
         {
             projectile = true;
+            numUnavaliable.Add(17);
         }
         Debug.Log(ability);
         Start();

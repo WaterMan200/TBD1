@@ -28,6 +28,7 @@ public class UI : MonoBehaviour
     private bool p2Timer;
     private bool p1WinTimer;
     private bool p2WinTimer;
+    private bool tieTimer;
     public TextMeshProUGUI timeText;
     private float timerText;
     void Start()
@@ -105,6 +106,24 @@ public class UI : MonoBehaviour
                 EventSystem.current.SetSelectedGameObject(button);
                 playerWinText.text = "Player 2 Wins";
                 p2WinTimer = false;
+            }
+        }
+        if(tieTimer == true)
+        {
+            endTimer -= Time.unscaledDeltaTime;
+            gameScreenTimerText.text = ("TIE");
+            p1Timer = false;
+            p2Timer = false;
+            p1WinTimer = false;
+            p2WinTimer = false;
+            if (endTimer <= 0)
+            { 
+                tieTimer = false;
+                startTimer = true;
+                PlayerMove playerMove1 = player1.GetComponent<PlayerMove>();
+                PlayerMove playerMove2 = player2.GetComponent<PlayerMove>();
+                playerMove1.Start();
+                playerMove2.Start();
             }
         }
     }
@@ -196,6 +215,17 @@ public class UI : MonoBehaviour
         Time.timeScale = 0f;
         timerText = 0f;
         timeText.text = "" + Mathf.Floor(timerText);
+    }
+    public void TieGame()
+    {
+        Debug.Log("Tie");
+        tieTimer = true;
+        endTimer = 1f;
+        Time.timeScale = 0f;
+        timerText = 0f;
+        timeText.text = "" + Mathf.Floor(timerText);
+        PlayerMove playerMove2 = player2.GetComponent<PlayerMove>();
+        playerMove2.SubtractWin();
     }
     public void P1Round()
     {
