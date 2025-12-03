@@ -19,12 +19,19 @@ public class Circle : MonoBehaviour
         if(pos.eulerAngles.y == 0+rotation)
         {
             p.GetComponent<Rigidbody2D>().velocity = new Vector2(15, 0);
-            p.tag = "p1c";
         }
         else
         {
-            p.GetComponent<Rigidbody2D>().velocity = new Vector2(-15, 0);
+            p.GetComponent<Rigidbody2D>().velocity = new Vector2(-15, 0);    
+        }
+
+        if(player.GetComponent<PlayerMove>().playerIndex == 0)
+        {
             p.tag = "p2c";
+        }
+        else if(player.GetComponent<PlayerMove>().playerIndex == 1)
+        {
+            p.tag = "p1c";
         }
         p.GetComponent<projectile>().AssignPlayer(player);
         

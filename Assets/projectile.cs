@@ -9,6 +9,7 @@ public class projectile : MonoBehaviour
     public void AssignPlayer(GameObject P)
     {
         pg = P;
+        Destory(gameObject, 3f);
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -17,7 +18,7 @@ public class projectile : MonoBehaviour
             if(other.CompareTag("P1"))
             {
                 pg.GetComponent<PlayerMove>().GotHit(0.5f);
-                Destroy(gameObject);
+                Destroy(gameObject, 0.05f);
 
             }
         }
