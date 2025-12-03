@@ -9,7 +9,7 @@ public class projectile : MonoBehaviour
     public void AssignPlayer(GameObject P)
     {
         pg = P;
-        Destory(gameObject, 3f);
+        Destroy(gameObject, 3f);
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
