@@ -41,7 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1688200553875423929}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 165d2ff63832a1147b4e0d3642fea4b6, type: 3}
+  m_Script: {fileID: 11500000, guid: 0279ae65e9baf2449bf19263aa67f865, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   circle: {fileID: 1766872581307299992}
@@ -57,6 +57,7 @@ GameObject:
   - component: {fileID: 8845556565814311724}
   - component: {fileID: 5023176982168579176}
   - component: {fileID: 6651293314070278224}
+  - component: {fileID: 2933898123873126538}
   m_Layer: 0
   m_Name: Projectile
   m_TagString: Untagged
@@ -167,3 +168,16 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &2933898123873126538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1766872581307299992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eae33e2f49f5b6f4ca36076c4fb14871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pg: {fileID: 0}

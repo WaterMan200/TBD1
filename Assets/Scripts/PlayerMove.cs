@@ -100,6 +100,9 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private List<int> numUnavaliable;
     [SerializeField] private bool done;
     [SerializeField] private bool tie;
+    [SerializeField] public AudioSource punchSound;
+    [SerializeField] public AudioSource kickSound;
+    [SerializeField] public AudioSource parrySound;
     public void Start()
     {
         if (dictionaryAdded == false)
@@ -142,7 +145,7 @@ public class PlayerMove : MonoBehaviour
             myDictionary.Add("Block\nBuffs\nDamage", 10);
             myDictionary.Add("Vampirism", 11);
             myDictionary.Add("Gambling", 12);
-            myDictionary.Add("Attacking\nInvisability", 13);
+            myDictionary.Add("Attacking\nInvisibility", 13);
             myDictionary.Add("Self\nDamage\nSuperhuman", 14);
             myDictionary.Add("Damage\nBuildup", 15);
             myDictionary.Add("Floating\nJump", 16);
@@ -462,7 +465,7 @@ public class PlayerMove : MonoBehaviour
             ui.Pause();
         }
     }
-    private void Invisable()
+    private void Invisible()
     {
         if (sr != null)
         {
@@ -546,7 +549,7 @@ public class PlayerMove : MonoBehaviour
     {
         roundsWon++;
         roundsWonText.text = "" + roundsWon;
-        if (roundsWon >= 5)
+        if (roundsWon >= ui.RoundMax())
         {
             if (playerIndex == 0)
             {
@@ -808,30 +811,33 @@ public class PlayerMove : MonoBehaviour
                     {
                         cooldown = stunTimer;
                         p2PlayerMove.DamageBlock();
+                        parrySound.Play();
                     }
                     else
                     {
+                        punchSound.Play();
                         if (slowDamage > 0)
                         {
                             damage = damage / 10;
                         }
                         if (invisAbility > 0)
                         {
-                            Invisable();
+                            Invisible();
                         }
                         if (gamble > 0)
                         {
                             Gambler();
                         }
                         p2PlayerMove.GotHit(damage);
+                        if (healOffHit > 0)
+                        {
+                            hp += healOffHit;
+                            if (hp > hpMax) hp = hpMax;
+                            p1Slider.value = hp;
+                        }
                         if (moveSlow > 0)
                         {
-                            if (healOffHit > 0)
-                            {
-                                hp += healOffHit;
-                                if (hp > hpMax) hp = hpMax;
-                                p1Slider.value = hp;
-                            }
+                            
                             p2PlayerMove.SlowMovement(moveSlow);
                         }
                     }
@@ -859,16 +865,18 @@ public class PlayerMove : MonoBehaviour
                     {
                         cooldown = stunTimer;
                         p1PlayerMove.DamageBlock();
+                        parrySound.Play();
                     }
                     else
                     {
+                        punchSound.Play();
                         if (slowDamage > 0)
                         {
                             damage = damage / 10;
                         }
                         if (invisAbility > 0)
                         {
-                            Invisable();
+                            Invisible();
                         }
                         if (gamble > 0)
                         {
@@ -916,16 +924,18 @@ public class PlayerMove : MonoBehaviour
                     {
                         cooldown = stunTimer;
                         p2PlayerMove.DamageBlock();
+                        parrySound.Play();
                     }
                     else
                     {
+                        kickSound.Play();
                         if (slowDamage > 0)
                         {
                             damage = damage / 10;
                         }
                         if (invisAbility > 0)
                         {
-                            Invisable();
+                            Invisible();
                         }
                         if (gamble > 0)
                         {
@@ -940,7 +950,7 @@ public class PlayerMove : MonoBehaviour
                         }
                         if (moveSlow > 0)
                         {
-                            p1PlayerMove.SlowMovement(moveSlow);
+                            p2PlayerMove.SlowMovement(moveSlow);
                         }
                     }
                     if (slowDamage > 0)
@@ -967,16 +977,18 @@ public class PlayerMove : MonoBehaviour
                     {
                         cooldown = stunTimer;
                         p1PlayerMove.DamageBlock();
+                        parrySound.Play();
                     }
                     else
                     {
+                        kickSound.Play();
                         if (slowDamage > 0)
                         {
                             damage = damage / 10;
                         }
                         if (invisAbility > 0)
                         {
-                            Invisable();
+                            Invisible();
                         }
                         if (gamble > 0)
                         {

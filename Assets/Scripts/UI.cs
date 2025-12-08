@@ -31,11 +31,14 @@ public class UI : MonoBehaviour
     private bool tieTimer;
     public TextMeshProUGUI timeText;
     private float timerText;
+    private int roundsToWin;
+    public TextMeshProUGUI roundsText;
     void Start()
     {
         timer = 3f;
         timerText = 0f;
         Time.timeScale = 0f;
+        roundsToWin = 5;
     }
     void Update()
     {
@@ -130,6 +133,19 @@ public class UI : MonoBehaviour
     public void StartGame()
     {
         startTimer = true;
+    }
+    public void PlusRounds()
+    {
+        roundsToWin ++;
+        roundsText.text = "" + roundsToWin;
+    }
+    public void MinusRounds()
+    {
+        if(roundsToWin > 1)
+        {
+            roundsToWin --;
+            roundsText.text = "" + roundsToWin;
+        }
     }
     public void Pause()
     {
@@ -300,5 +316,9 @@ public class UI : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+    public int RoundMax()
+    {
+        return roundsToWin;
     }
 }
