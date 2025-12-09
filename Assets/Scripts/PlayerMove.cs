@@ -256,6 +256,7 @@ public class PlayerMove : MonoBehaviour
     {
         if(rb.velocity.x != 0f && canDash && dash <=0f)
         {
+            animator.SetTrigger("dash");
             dashDirection = rb.velocity.x / Mathf.Abs(rb.velocity.x);
             dash = 2f;
         }
@@ -268,16 +269,18 @@ public class PlayerMove : MonoBehaviour
             {
                 if(circleCooldown <= 0)
                 {
-                cScript.Shoot(p1.transform, 0, p2);
-                circleCooldown = 1f;
+                    animator.SetTrigger("circle");
+                    cScript.Shoot(p1.transform, 0, p2);
+                    circleCooldown = 1f;
                 }
             }
             else if(playerIndex == 1)
             {
                 if(circleCooldown <= 0)
                 {
-                cScript.Shoot(p2.transform, 180, p1);
-                circleCooldown = 1f;
+                    animator.SetTrigger("circle");
+                    cScript.Shoot(p2.transform, 180, p1);
+                    circleCooldown = 1f;
                 }
             }
         }
@@ -288,7 +291,10 @@ public class PlayerMove : MonoBehaviour
     {
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
         if(isGrounded)
+        {
+            animator.SetTrigger("jump");
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+        }
         if(floater)
         {
             floatingCheck = true;
@@ -463,6 +469,8 @@ public class PlayerMove : MonoBehaviour
         if (gameStarted)
         {
             ui.Pause();
+            busy = true;
+            animBusy = true;
         }
     }
     private void Invisible()
@@ -549,6 +557,8 @@ public class PlayerMove : MonoBehaviour
     {
         roundsWon++;
         roundsWonText.text = "" + roundsWon;
+        busy = true;
+        animBusy = true;
         if (roundsWon >= ui.RoundMax())
         {
             if (playerIndex == 0)
@@ -761,7 +771,7 @@ public class PlayerMove : MonoBehaviour
             }
         }
         cooldown -= Time.deltaTime;
-        if (0f >= cooldown)
+        if (0f >= cooldown && Time.timeScale == 1f)
         {
             rb.velocity = new Vector2(mover.x*speed, rb.velocity.y);
 
@@ -1080,7 +1090,10 @@ public class PlayerMove : MonoBehaviour
         if (ability == 1)
             hpMax += 2f;
         if (ability == 2)
+        {
             speed *= 1.5f;
+            oldSpeed = speed;
+        }
         if (ability == 3)
             regen += 0.15f;
         if (ability == 4)
@@ -1142,11 +1155,11 @@ public class PlayerMove : MonoBehaviour
         {
             if (slowDamage > 0)
             {
-                slowDamage += .15f;
+                slowDamage += .2f;
             }
             else
             {
-                slowDamage += 1.15f;
+                slowDamage += 1.2f;
             }
         }
         if (ability == 16)
