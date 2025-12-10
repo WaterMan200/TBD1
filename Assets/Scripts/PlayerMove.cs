@@ -292,6 +292,7 @@ public class PlayerMove : MonoBehaviour
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
         if(isGrounded)
         {
+            animator.SetBool("isGrounded", false);
             animator.SetTrigger("jump");
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
         }
@@ -620,6 +621,15 @@ public class PlayerMove : MonoBehaviour
     void Update()
     {
         slowTimer -= Time.deltaTime;
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+        if(isGrounded == true)
+        {
+            animator.SetBool("isGrounded", true);
+        }
+        else
+        {
+            animator.SetBool("isGrounded", false);
+        }
         if(slowTimerBool == true && slowTimer <= 0)
         {
             speed = oldSpeed;
@@ -653,12 +663,16 @@ public class PlayerMove : MonoBehaviour
                     if (playerIndex == 0)
                     {
                         if (p2PlayerMove.RoundWin())
+                        {
                             ui.P1Round();
+                        }
                     }
                     if (playerIndex == 1)
                     {
                         if (p1PlayerMove.RoundWin())
+                        {
                             ui.P2Round();
+                        }
                     }
                 }
                 done = true;
